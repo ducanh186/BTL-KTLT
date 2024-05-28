@@ -1,13 +1,15 @@
 # **BTL-KTLT**
-git
+
 
 
 
 ## *Chủ đề: Hệ thống quản lý đào tạo trường THCS - Phân hệ nhập điểm các môn học cho học sinh*
 ### Thành viên:     
     Lê Đức Anh-20224403 
-    Lương Gia Nghiêm
+    Lương Gia Nghiêm-20224435
     Chu Thiên Phú
+
+    
     Nguyễn Quang Phú
 
 ### Tính năng:    

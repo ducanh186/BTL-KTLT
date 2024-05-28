@@ -1,6 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <string>
+#include <stdio.h>
+#include <string.h>
 
 // ... (Định nghĩa cấu trúc dữ liệu Học sinh, Môn học)
 struct NgaySinh{
@@ -9,19 +8,18 @@ struct NgaySinh{
     int year;
 };
 struct HocSinh{
-    char ID[15];
+    int ID;
     char hoten[100];
     struct NgaySinh ngaysinh;
-    char lop [10]
+    char lop [10];
 };
 struct Diem{
-    char ID[];
+    int ID;
     int mamon;
-    float diemDGTX; //x1 theo hệ số
+    float diemTBDGTX; //x1 theo hệ số
     float diemKTGK; //x2 theo hệ số
     float diemKTCK; //x3 theo hệ số
-    float diemTB;
-}
+};
 struct Monhoc{
     int mamon;
     char tenmon[30];
@@ -34,6 +32,7 @@ void MenuChucNang() {
     printf("2. Quản lý môn học\n");
     printf("3. Quản lý điểm\n");
 }
+
 void MenuQLHS(){
     printf("Quản lý học sinh:\n");
     printf("0. Thoát chương trình\n");
@@ -47,72 +46,151 @@ void MenuQLHS(){
 void HienThiDanhSachHS(struct HocSinh ArrHocSinh[], int SoLuongHocSinh){
     printf("STT học sinh\t Họ tên\t Ngày sinh\t Lớp\n");
     for (int i=0; i<SoLuongHocSinh; i++){
-        printf("%s \t %s \t %d/%d/%d \t %s \n", ArrHocSinh[i].ID, ArrHocSinh[i].hoten, ArrHocSinh[i].ngaysinh.date, ArrHocSinh[i].ngaysinh.month, ArrHocSinh[i].ngaysinh.year, ArrHocSinh[i].lop);
+        printf("%d\t %s\t %d / %d / %d\t %s\n", ArrHocSinh[i].ID, ArrHocSinh[i].hoten, ArrHocSinh[i].ngaysinh.date, ArrHocSinh[i].ngaysinh.month, ArrHocSinh[i].ngaysinh.year, ArrHocSinh[i].lop);
     }
 }
 void HienThiDanhSachHSTheoLop(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, char lop[30]){
     printf("STT học sinh\t Họ tên\t Ngày sinh\t Lớp\n");
     for (int i=0; i<SoLuongHocSinh; i++){
         if( strcmp(lop, ArrHocSinh[i].lop)==0){
-        printf("%s \t %s \t %d/%d/%d \t %s \n", ArrHocSinh[i].ID, ArrHocSinh[i].hoten, ArrHocSinh[i].ngaysinh.date, ArrHocSinh[i].ngaysinh.month, ArrHocSinh[i].ngaysinh.year, ArrHocSinh[i].lop);
+        printf("%d \t %s \t %d/%d/%d \t %s \n", ArrHocSinh[i].ID, ArrHocSinh[i].hoten, ArrHocSinh[i].ngaysinh.date, ArrHocSinh[i].ngaysinh.month, ArrHocSinh[i].ngaysinh.year, ArrHocSinh[i].lop);
     }
     }
 }
 void NhapHS( struct HocSinh ArrHocSinh[], int SoLuongHocSinh){
     printf("Nhập thông tin cho học sinh thứ %d\n", SoLuongHocSinh +1 );
-    printf("Nhập vào ID học sinh: "); scanf("%d", ArrHocSinh[SoLuongHocSinh].ID);
-    printf("Nhập vào ")
+    printf("Nhập vào ID học sinh: "); scanf("%d", &ArrHocSinh[SoLuongHocSinh].ID);
+    printf("Nhập vào họ và tên học sinh "); fflush(stdin); fflush(stdin); fgets(ArrHocSinh[SoLuongHocSinh].hoten,100,stdin);
+    printf("Nhập vào ngày/tháng/năm sinh: ");
+    scanf("%d", &ArrHocSinh[SoLuongHocSinh].ngaysinh.date);
+    scanf("%d", &ArrHocSinh[SoLuongHocSinh].ngaysinh.month);
+    scanf("%d", &ArrHocSinh[SoLuongHocSinh].ngaysinh.year);
+    printf("Nhập lớp học sinh: ");
+    fflush(stdin);
+    fgets(ArrHocSinh[SoLuongHocSinh].lop,10,stdin);
+    SoLuongHocSinh++;
 }
+void XoaHS(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, int ma){
+    
+    for(int i=0; i< SoLuongHocSinh; i++){
+        if(ArrHocSinh[i].ID == ma){
+            for(int j=i+1; j< SoLuongHocSinh; j++){
+                ArrHocSinh[j]=ArrHocSinh[j+1];
+            }
+            SoLuongHocSinh-- ;
+            break;
+        }
+    }
+}
+void SapXepHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh){
+
+    for(int i=0; i<SoLuongHocSinh-1; i++){
+        for(int j=i+1; j<SoLuongHocSinh; j++){
+            if(strcmp(ArrHocSinh[i].hoten, ArrHocSinh[j].hoten) > 0){
+                struct HocSinh temp = ArrHocSinh[i];
+                ArrHocSinh[i] = ArrHocSinh[j];
+                ArrHocSinh[j] = temp;
+            }
+        }
+    }
+}
+void TimKiemHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, char hoten[100]){
+    int check = 0;
+    for(int i=0; i<SoLuongHocSinh; i++){
+        if(strcmp(ArrHocSinh[i].hoten, hoten) == 0){
+            printf("Tên: %s\n", hoten);
+            printf("ID: %d\n", ArrHocSinh[i].ID);
+            printf("Ngày sinh: %d/%d/%d\n", ArrHocSinh[i].ngaysinh.date, ArrHocSinh[i].ngaysinh.month, ArrHocSinh[i].ngaysinh.year);
+            printf("Lop: %s\n", ArrHocSinh[i].lop);
+            check++ ;
+        }
+    }
+    if(check == 0){
+        printf("Khong tim thay hoc sinh co ten %s\n", hoten);
+    }
+}
+
+void MenuQLD(){
+    printf("Quản lý điểm:\n");
+    printf("0. Thoát chương trình\n");
+    printf("1. Hiển thị danh sách điểm\n");
+    printf("2. Nhập điểm\n");
+    printf("3. Xoá điểm\n");
+    printf("4. Điều chỉnh điểm\n");
+    printf("5. Tìm kiếm điểm theo tên\n");
+    printf("6. Hiển thị điểm theo môn\n");
+}
+void HienThiDiem(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[]){
+    printf("STT\t Ho va ten\t DTBDGTX\t DKTGK\t DKTCK\t DTB\n");
+    for(int i=0; i<SoLuongHocSinh; i++){
+        printf("%d\t %s\t %f\t %f\t %f\t %f\n", ArrHocSinh[i].ID,ArrHocSinh[i].hoten, ArrDiem[i].diemTBDGTX, ArrDiem[i].diemKTGK, ArrDiem[i].diemKTCK, (ArrDiem[i].diemTBDGTX+2*ArrDiem[i].diemKTGK+3*ArrDiem[i].diemKTCK)/6);
+    }
+}
+
 int main() {
     int chon = 0;
     struct HocSinh ArrHocSinh[1000];
-    int SoLuongHocSinh;
+    struct Diem ArrDiem[1000];
+    int SoLuongHocSinh=1;
     do{
-        MenuChucNang();
-        printf("Nhập vào lựa chọn của bạn: ")
+        MenuChucNang();                 
+        printf("Nhập vào lựa chọn của bạn: ");
         scanf("%d", &chon);
         switch (chon)
         {
         case 0:{
-            printf("Thoát") // nhập 0 --> thoát
+            printf("Thoát"); // nhập 0 --> thoát
             break;
         }
         case 1:{    //học sinh
             int chonQLHS;
+            printf("Đang ở quản lý học sinh");
             do{
                 MenuQLHS();
-                printf("Nhập vào lựa chọn của bạn: ")
+                printf("Nhập vào lựa chọn của bạn: ");
                 scanf("%d", &chonQLHS);
                 switch (chonQLHS)
                 {
-                case 0:{
-                    printf("Thoát") // nhập 0 --> thoát ra qlht
+                case 0:{    //Thoát
+                    printf("Thoát"); // nhập 0 --> thoát ra qlht
                     break;
                 }
-                case 1:{
-                    HienThiDanhSachHS(ArrHocSinh, SoLuongHocSinh)
+                case 1:{    //Hiển thị sinh viên
+                    HienThiDanhSachHS(ArrHocSinh, SoLuongHocSinh);
                     break;
                 }
                 case 2:{    //Nhập sinh viên
+                    NhapHS(ArrHocSinh, SoLuongHocSinh);
                     break;
                 }
-                case 3:{
+                case 3:{    //Xoá học sinh
+                    int ma;
+                    printf("Nhập ID học sinh cần xoá: ");
+                    scanf("%d", &ma);
+                    XoaHS(ArrHocSinh, SoLuongHocSinh, ma);
                     break;
                 }
-                case 4:{
+                case 4:{    //Sắp học sinh theo tên
+                    SapXepHocSinhTheoTen(ArrHocSinh, SoLuongHocSinh);
+                    HienThiDanhSachHS(ArrHocSinh, SoLuongHocSinh);
                     break;
                 }
                 case 5:{    // Hiển thị sinh viên theo lớp
                     char lop[30];
-                    printf("Chọn lớp: ")
-                    gets(lop);
+                    printf("Chọn lớp: ");
+                    fgets(lop,30,stdin);
                     HienThiDanhSachHSTheoLop(ArrHocSinh, SoLuongHocSinh, lop);
                     break;
                 }
-                case 6:{
+                case 6:{    //Tìm kiếm học sinh theo tên
+                    char hoten[100];
+                    printf("Nhap vao ten cua hoc sinh can tim kiem: ");
+                    scanf("%s", hoten);
+                    TimKiemHocSinhTheoTen(ArrHocSinh, SoLuongHocSinh, hoten);
                     break;
                 }
                 default:{
+                    printf("Lựa chọn sai, vui lòng nhập lại");
                     break;
                 }
                 }
@@ -123,10 +201,39 @@ int main() {
             break;
         }
         case 3:{    // điểm
+            int chonQLD;
+            printf("Dang o quan ly diem");
+            do{
+                MenuQLD();
+                printf("Nhap vao lua chon: ");
+                scanf("%d", &chonQLD);
+                switch (chonQLD)
+                {
+                case 0:{    //Thoát
+                    printf("Thoát"); // nhập 0 --> thoát ra qlht
+                    break;
+                }
+                case 1:{ //Hiển thị điểm theo danh sách
+                    HienThiDiem(ArrHocSinh, SoLuongHocSinh, ArrDiem);
+                    break;
+                }    
+                case 2:{    //Nhập điểm
+                char hoten[100];
+                printf("Nhap diem cho hoc sinh: ");
+                scanf("%s", hoten);
+
+                break;
+                }
+                default:{
+                    printf("Lựa chọn sai, vui lòng nhập lại");
+                    break;
+                }
+                }
+            } while (chonQLD !=0);
             break;
         }
         default:{
-            printf("Nhập sai\n") // nhập sai --> nhập lại
+            printf("Nhap lai\n");// nhập sai --> nhập lại
         }
         }
     } while (chon !=0);

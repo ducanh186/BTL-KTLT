@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-
-// ... (Định nghĩa cấu trúc dữ liệu Học sinh, Môn học)
 struct NgaySinh{
     int date;
     int month;
@@ -23,14 +21,15 @@ struct Diem{
 struct Monhoc{
     int mamon;
     char tenmon[30];
-    char hocKy;
+    int hocki;
 };
+
 void MenuChucNang() {
-    printf("Hệ thống quản lý học sinh:\n");
-    printf("0. Thoát chương trình\n");
-    printf("1. Quản lý học sinh\n");
-    printf("2. Quản lý môn học\n");
-    printf("3. Quản lý điểm\n");
+    printf("He thong quan ly hoc sinh: \n");
+    printf("0. Thoat chuong trinh\n");
+    printf("1. Quan ly hoc sinh\n");
+    printf("2. Quan ly mon hoc\n");
+    printf("3. Quan ly diem\n");
 }
 
 void MenuQLHS(){
@@ -94,7 +93,7 @@ void SapXepHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh){
         }
     }
 }
-void TimKiemHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, char hoten[100]){
+void TimKiemHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, char hoten[30]){
     int check = 0;
     for(int i=0; i<SoLuongHocSinh; i++){
         if(strcmp(ArrHocSinh[i].hoten, hoten) == 0){
@@ -110,39 +109,174 @@ void TimKiemHocSinhTheoTen(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, char
     }
 }
 
-void MenuQLD(){
-    printf("Quản lý điểm:\n");
-    printf("0. Thoát chương trình\n");
-    printf("1. Hiển thị danh sách điểm\n");
-    printf("2. Nhập điểm\n");
-    printf("3. Xoá điểm\n");
-    printf("4. Điều chỉnh điểm\n");
-    printf("5. Tìm kiếm điểm theo tên\n");
-    printf("6. Hiển thị điểm theo môn\n");
+void MenuQLMH(){
+    printf("Quan ly mon hoc:\n");
+    printf("0. Thoat chuong trinh\n");
+    printf("1. Hien thi danh sach mon hoc\n");
+    printf("2. Them mon hoc\n");
+    printf("3. Xoa mon hoc\n");
+    printf("4. Sua thong tin mon hoc\n");
 }
-void HienThiDiem(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[]){
+
+void MenuQLD(){
+    printf("Quan ly diem:\n");
+    printf("0. Thoat chuong trinh\n");
+    printf("1. Hien thi danh sach diem\n");
+    printf("2. Dieu chinh diem\n");
+    printf("3. Xoa diem\n");
+    printf("4. Hien thi diem cua hoc sinh\n");
+    printf("5. Hien thi diem theo mon hoc\n");
+}
+void HienThiDanhSachDiem(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[]){
     printf("STT\t Ho va ten\t DTBDGTX\t DKTGK\t DKTCK\t DTB\n");
     for(int i=0; i<SoLuongHocSinh; i++){
         printf("%d\t %s\t %f\t %f\t %f\t %f\n", ArrHocSinh[i].ID,ArrHocSinh[i].hoten, ArrDiem[i].diemTBDGTX, ArrDiem[i].diemKTGK, ArrDiem[i].diemKTCK, (ArrDiem[i].diemTBDGTX+2*ArrDiem[i].diemKTGK+3*ArrDiem[i].diemKTCK)/6);
     }
 }
+void DieuChinhDiem(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[], char hoten[30]){
+    int check = 0;
+    int j=0;
+    for( int i=0; i<SoLuongHocSinh; i++){
+        if(strcmp(ArrHocSinh[i].hoten, hoten) == 0){
+            check++ ;
+            j=i;
+            break;
+        }
+    }
+    if(check == 0){
+        printf("Khong tim thay hoc sinh co ten %s\n", hoten);
+    }
+    else{
+        int type;
+        do{
+        printf("Nhap diem: \n");
+        printf("0. Quay lai\n");
+        printf("1. Trung binh diem danh gia thuong xuyen\n");
+        printf("2. Diem giua ki\n");
+        printf("3. Diem cuoi ki\n");
+        scanf("%d", &type);
+        switch(type){
+            case 0:{
+                printf("Thoat"); // nhập 0 --> thoát
+                break;
+        }
+            case 1:{
+                printf("Trung binh diem danh gia thuong xuyen");
+                scanf("%f", &ArrDiem[j].diemTBDGTX);
+                break;
+            }
+            case 2:{
+                printf("Diem giua ki");
+                scanf("%f", &ArrDiem[j].diemKTGK);
+                break;
+            }
+            case 3:{
+                printf("Diem cuoi ki");
+                scanf("%f", &ArrDiem[j].diemKTCK);
+                break;
+            }
+            default:{
+                printf("Lua chon sai, vui long nhap lai");
+                break;
+            }
+        }
+} while (type != 0);
+}
+}
+void XoaDiem(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[], char hoten[30]){
+    int check = 0;
+    int j=0;
+    for( int i=0; i<SoLuongHocSinh; i++){
+        if(strcmp(ArrHocSinh[i].hoten, hoten) == 0){
+            check++ ;
+            j=i;
+            break;
+        }
+    }
+    if(check == 0){
+        printf("Khong tim thay hoc sinh co ten %s\n", hoten);
+    }
+    else{
+        int type;
+        do{
+        printf("Xoa diem: \n");
+        printf("0. Quay lai\n");
+        printf("1. Trung binh diem danh gia thuong xuyen\n");
+        printf("2. Diem giua ki\n");
+        printf("3. Diem cuoi ki\n");
+        scanf("%d", &type);
+        switch(type){
+            case 0:{
+                printf("Thoat"); // nhập 0 --> thoát
+                break;
+        }
+            case 1:{
+                printf("Trung binh diem danh gia thuong xuyen:\n");
+                printf("%f --> 0", ArrDiem[j].diemTBDGTX);
+                ArrDiem[j].diemTBDGTX = 0;
+                break;
+            }
+            case 2:{
+                printf("Diem kiem tra giua ki:\n");
+                printf("%f --> 0", ArrDiem[j].diemKTGK);
+                ArrDiem[j].diemKTGK = 0;
+                break;
+            }
+            case 3:{
+                printf("Diem kiem tra cuoi ki:\n");
+                printf("%f --> 0", ArrDiem[j].diemKTCK);
+                ArrDiem[j].diemKTCK = 0;
+                break;
+            }
+            default:{
+                printf("Lua chon sai, vui long nhap lai");
+                break;
+            }
+        }
+} while (type != 0);
+}
+}
+void HienThiDiemHocSinh(struct HocSinh ArrHocSinh[], int SoLuongHocSinh, struct Diem ArrDiem[], char hoten[30]){
+    int check = 0;
+    int j=0;
+    for( int i=0; i<SoLuongHocSinh; i++){
+        if(strcmp(ArrHocSinh[i].hoten, hoten) == 0){
+            check++ ;
+            j=i;
+            break;
+        }
+    }
+    if(check == 0){
+        printf("Khong tim thay hoc sinh co ten %s\n", hoten);
+    }
+    else{
+    printf("STT\t Ho va ten\t DTBDGTX\t DKTGK\t DKTCK\t DTB\n");
+
+    printf("%d\t %s\t %f\t %f\t %f\t %f\n", ArrHocSinh[j].ID,ArrHocSinh[j].hoten, ArrDiem[j].diemTBDGTX, ArrDiem[j].diemKTGK, ArrDiem[j].diemKTCK, (ArrDiem[j].diemTBDGTX+2*ArrDiem[j].diemKTGK+3*ArrDiem[j].diemKTCK)/6);
+    }
+}
+
+
 
 int main() {
     int chon = 0;
     struct HocSinh ArrHocSinh[1000];
+    struct Monhoc ArrMonHoc[1000];
     struct Diem ArrDiem[1000];
     int SoLuongHocSinh=1;
+    int SoLuongMonHoc=1;
+    int SoLuongHocKi=1;
     do{
         MenuChucNang();                 
-        printf("Nhập vào lựa chọn của bạn: ");
+        printf("Nhap lua chon cua ban: ");
         scanf("%d", &chon);
         switch (chon)
         {
-        case 0:{
-            printf("Thoát"); // nhập 0 --> thoát
+        case 0:{    //  thoát
+            printf("Ket thuc chuong trinh"); 
             break;
         }
-        case 1:{    //học sinh
+        case 1:{    //  học sinh
             int chonQLHS;
             printf("Đang ở quản lý học sinh");
             do{
@@ -197,10 +331,41 @@ int main() {
             } while (chonQLHS !=0);
             break;
         }
-        case 2:{    // môn
+        case 2:{    //  môn
+            int chonQLMH;
+            printf("Dang o quan ly mon hoc");
+            do{
+                MenuQLMH();
+                printf("Nhap vao lua chon: ");
+                scanf("%d", &chonQLMH);
+                switch (chonQLMH){
+                case 0:{    //Thoát
+                    printf("Thoát"); // nhập 0 --> thoát ra qlht
+                    break;
+                }
+                case 1:{    //Hiển Thị Môn Học
+                    
+                    break;
+                }    
+                case 2:{    
+                    break;
+                }
+                case 3:{   
+                    break;
+                }
+                case 4:{   
+                    break;
+                }
+                default:{
+                    printf("Lua chon sai, vui long nhap lai");
+                    break;
+                }
+                }
+                
+            } while (chonQLMH !=0);
             break;
         }
-        case 3:{    // điểm
+        case 3:{    //  điểm
             int chonQLD;
             printf("Dang o quan ly diem");
             do{
@@ -214,18 +379,34 @@ int main() {
                     break;
                 }
                 case 1:{ //Hiển thị điểm theo danh sách
-                    HienThiDiem(ArrHocSinh, SoLuongHocSinh, ArrDiem);
+                    HienThiDanhSachDiem(ArrHocSinh, SoLuongHocSinh, ArrDiem);
                     break;
                 }    
-                case 2:{    //Nhập điểm
-                char hoten[100];
-                printf("Nhap diem cho hoc sinh: ");
-                scanf("%s", hoten);
-
-                break;
+                case 2:{    //Dieu chinh diem
+                    char hoten[30];
+                    printf("Nhap diem cho hoc sinh: ");
+                    scanf("%s", hoten);
+                    DieuChinhDiem(ArrHocSinh, SoLuongHocSinh, ArrDiem, hoten);
+                    break;
                 }
+                case 3:{    //Xoá điểm
+                    char hoten[100];
+                    printf("Nhap diem cho hoc sinh: ");
+                    scanf("%s", hoten);
+                    XoaDiem(ArrHocSinh, SoLuongHocSinh, ArrDiem, hoten);
+                    break;
+                }
+                case 4:{    //Hien thi danh sach diem theo ten hoc sinh
+                    char hoten[30];
+                    printf("Chon hoc sinh: ");
+                    scanf("%s", hoten);
+                    HienThiDiemHocSinh(ArrHocSinh, SoLuongHocSinh, ArrDiem, hoten);
+                    break;
+                }
+                
+                
                 default:{
-                    printf("Lựa chọn sai, vui lòng nhập lại");
+                    printf("Lua chon sai, vui long nhap lai");
                     break;
                 }
                 }
@@ -239,3 +420,4 @@ int main() {
     } while (chon !=0);
     return 0;
 }
+

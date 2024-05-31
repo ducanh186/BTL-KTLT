@@ -12,10 +12,10 @@ typedef enum Gender Gender;
 };
 typedef struct Date Date; 
 struct Score {
-    float test_mini[4];
-    float test_45mins[2];
-    float mid_term_score;
-    float end_term_score;
+    double test_mini[4];
+    double test_45mins[2];
+    double mid_term_score;
+    double end_term_score;
 };
 typedef struct Score Score;
 // viết hàm tính điểm trung bình các môn :phú béo
@@ -55,9 +55,7 @@ struct Semester {
 };
 typedef struct Semester Semester;
 
-void generate(){
-    //tạo tầm 3 thằng : Phú béo
-}
+
 void baomat();
 void MenuDisplay();
 #endif

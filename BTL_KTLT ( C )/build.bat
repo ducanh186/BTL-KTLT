@@ -1,1 +1,1 @@
-gcc main.c src/input.c -o main -Iinc -Wall -Wextra -Wconversion -Wpedantic --std=c99
+gcc main.c src/input.c -o main -Iinc -Wall -Wextra -Wpedantic --std=c17

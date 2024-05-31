@@ -40,5 +40,8 @@
 ## 3: Hiển thị danh sách điểm theo từng học sinh ( Nhập tên học sinh muốn hiển thị )
 ## 4: Hiển thị danh sách điểm theo từng môn học ( Nhập môn muốn hiển thị )
 
-
+**myAssignment:
+1.2 Hiển thị danh sách điểm theo tên 
+4  Hiển thị danh sách điểm theo từng môn học ( Nhập môn muốn hiển thị )
+ 
 

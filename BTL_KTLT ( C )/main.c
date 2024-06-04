@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX_SI_SO 100
 enum Gender {
     Male=1,
     Female
@@ -102,36 +103,32 @@ void Main_Menu_Display(){
     printf("Chon chuc nang: \n");
     printf("0. Thoat\n");
     printf("1. Hien thi danh sach diem trung binh \n");
-    /*extend
-        1.1 theo tên alphab & reverse
-        1.2 theo độ dốc các môn & reverse
-        1.3 theo điểm trung bình & reverse
-    */ 
-    printf("2. Sua diem\n"); 
-    /* lựa chọn sửa điểm
-    2.1 diem mini test 
-    2.2 diem 45p
-    2.3 diem giua ki
-    2.4 diem cuoi ki
-    */ 
+    printf("2. Chinh sua diem\n"); 
     printf("3. Hien thi danh sach theo hoc sinh\n"); // điền tên học sinh muốn tìm
     printf("4. Hien thi danh sach theo mon hoc\n"); // điền tên môn học
 
 }
 void Menu_1_Display(){
+    printf("Chon chuc nang hien thi: \n");
+    printf("0. Quay lai Main Menu\n");
+    printf("1. Theo mac dinh\n");
+    printf("2. Theo ten alphabet\n");
+    printf("3. Theo do doc cac mon\n");
+    printf("4. Theo diem tong ket\n");
 
 }
+
+Student Hoc_sinh[MAX_SI_SO];
+int numStudents;
+int Si_so_lop(){
+    return numStudents;
+}
 void Tao_data(){
-    Student Hs1 = {
-        .name = "Nguyen Van A",
-        .class = "10A1",
-        .gender = Male,
-        .birthday = { .day = 15, .month = 3, .year = 2006 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.5, 9.0, 7.5, 8.0}, {7.0, 8.5}, 8.2, 9.0 } },
-            { .subject_name = Physics, .score = { {7.0, 6.5, 8.0, 7.2}, {6.8, 7.5}, 7.6, 8.4 } },
-        }
-    };
+
+        strcpy(Hoc_sinh[0].name , "Nguyen Van A");
+        strcpy(Hoc_sinh[0].class , "10A1");
+        Hoc_sinh[0].gender = Male;
+        
     Student Hs2 = {
     .name = "Tran Thi B",
     .class = "10A2",
@@ -155,7 +152,7 @@ Student Hs3 = {
 };
 
 Student Hs4 = {
-    .name = "Pham Thi D",
+    .name = "Pham Thi An",
     .class = "10A4",
     .gender = Female,
     .birthday = { .day = 25, .month = 12, .year = 2006 },
@@ -164,39 +161,54 @@ Student Hs4 = {
         { .subject_name = Physics, .score = { {8.0, 7.5, 8.5, 8.7}, {7.8, 8.5}, 8.2, 9.1 } },
     }
 };
+
 }
 
 int main(){
-    
+     Tao_data();   
+   
+
     while(1){
-        system("cls");
-    Main_Menu_Display();
-    Tao_data();
+    system("cls");// xoa moi thu tren man hinh
+    Main_Menu_Display();// goi ra main menu  
     int option=GetMode("Select mode [0-4]", "Mode selected") ; 
      int backToMainMenu = 0;
-    if (option == 1) {
-        printf("-----Hien thi danh sach diem trung binh----\n");
+        if (option == 1) {
+            while (!backToMainMenu) { // Vòng lặp menu con
+            printf("-----Hien thi danh sach diem trung binh----\n");
+            Menu_1_Display();
+                int sub_Option = GetMode("Select mode [0-4]", "Mode selected");
 
-        while (!backToMainMenu) { // Vòng lặp menu con
-            int subOption = GetMode("Chon thao tac [1. Xem diem, 2. Sap xep, 0. Quay lai]", "Thao tac duoc chon");
-
-            if (subOption == 1) {
-                // Xử lý xem điểm trung bình
-            } else if (subOption == 2) {
-                // Xử lý sắp xếp điểm trung bình
-            } else if (subOption == 0) {
-                backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
-            } else {
-                printf("Lua chon khong hop le!\n");
+                if (sub_Option == 1) {
+                    // 
+                } else if (sub_Option == 2) {
+                    // Xử lý sắp xếp điểm trung bình
+                } else if (sub_Option == 0) {
+                    backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
+                } else {
+                    printf("Lua chon khong hop le!\n");
+                }
+                if (backToMainMenu) {
+                        break; // Thoát khỏi vòng lặp menu chính
+                        }
             }
-            if (backToMainMenu) {
-                    break; // Thoát khỏi vòng lặp menu chính
-                    }
-        }
-            // Xử lý các option khác tương tự
-                
+        }//het op=1
+    else if(option==2){
+      //.....  
+    }
+    else if(option==3){
+        ///
+    }
+    else if(option==4){
+        ///
+    }
 
-                    }
+    else if(option==0){// Exiting the program
+        printf("\nExit program!");
+        exit(0);
+    }
 
-            }
-}
+
+
+    }// het vong while to
+}// het ham main

@@ -56,7 +56,14 @@ struct Semester {
     Student student;
 };
 typedef struct Semester Semester;
-
+struct Diem {
+    float diemTongKet;
+    float diemTrungBinhMonHoc[12];
+};
+typedef struct Diem Diem;
+// Mảng chứa điểm của tất cả học sinh
+Student Hoc_sinh[MAX_SI_SO];
+Diem ketQuaHocSinh[MAX_SI_SO]; 
 const char* subjectNameToString(Subject_name subject) {
     switch (subject) { //// Chuyển đổi Subject_name thành chuỗi
         case Maths:          return "Toan";
@@ -74,6 +81,7 @@ const char* subjectNameToString(Subject_name subject) {
         default:             return "Unknown";
     }
 }
+
 float S_Aver(float Arr[],int n){
     float sum=0;
     for(int i=0;i<n;i++){
@@ -110,7 +118,6 @@ void baomat(){
                 continue;
             }
             else{
-                printf("-(V)-!!Login successfully!!\n");
                 break;
             }
         }
@@ -163,7 +170,7 @@ void Menu_2_1_Display(){
     printf("Vui long nhap ten (Last Name) hoc sinh can sua diem!!\n");
     printf("Vui long nhap ten khong dau\n");
 }
-Student Hoc_sinh[MAX_SI_SO];
+
 int numStudents;
 int Si_so_lop(){
     return numStudents;
@@ -294,12 +301,34 @@ void Tao_data_lop_6A1(){
     };
     numStudents=6;
 }
+void tinhDiem(Student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
+        ketQuaHocSinh[i].diemTongKet = 0;
+        for (int j = 0; j < 12; j++) {
+            ketQuaHocSinh[i].diemTrungBinhMonHoc[j] = Aver(students[i].subject[j].score.test_mini,
+                                                      students[i].subject[j].score.test_45mins,
+                                                      students[i].subject[j].score.mid_term_score,
+                                                      students[i].subject[j].score.end_term_score);
+            ketQuaHocSinh[i].diemTongKet += ketQuaHocSinh[i].diemTrungBinhMonHoc[j];
+            
+        }
+        ketQuaHocSinh[i].diemTongKet/=12;
+    }
+}
+void hienThiDiemTongKet(Student list[],int numStudents) {
+    tinhDiem(list,numStudents);
+    for (int i = 0; i < numStudents; i++) {
+        printf("%-4.1f|\n", ketQuaHocSinh[i].diemTongKet);
+
+    }
+}
 //parameter= tham so => dat ten la para_x :para_Si_so_lop 
 void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){
+    tinhDiem(Hoc_sinh,numStudents);
         printf("\n");
         char tieude[]="~~~---DANH SACH HOC SINH---~~~";
         printf("%70s\n",tieude);
-        int length = 121;
+        int length = 126;
         for (int i = 0; i < length; i++) {
         printf("_");
         }
@@ -316,7 +345,7 @@ void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){
         for (int i = 0; i < 12; i++) {//In ten cac mon hoc
         printf("|%-4s", subjectNameToString(i + 1)); 
         }
-        printf("|\n");
+        printf("|T.K |\n");
     for(int i=0;i<para_Si_so_lop;i++){
         printf("|%-3d",i+1);
         printf("|%-25s",Hoc_sinh[i].hoten);// can le tu ben trai sang phai fill 25 ki tu
@@ -332,10 +361,11 @@ void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){
                                 Hoc_sinh[i].subject[j].score.mid_term_score,
                                 Hoc_sinh[i].subject[j].score.end_term_score ));
                 }
+        printf("|%-4.1f", ketQuaHocSinh[i].diemTongKet);
         printf("|\n");
     }
         printf("$");
-        int length_1 = 119;
+        int length_1 = 124;
     for (int i = 0; i < length_1; i++) {
         printf("~");
         }
@@ -555,7 +585,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
     int subjectOption;
         subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon");
     in_diem_hien_tai_cua_1HS(subjectOption,index);
-    printf("\nChon Diem muon sua:\n");
+    printf("\nChon Diem uon sua:\n");
     printf("1. Diem giua ki\n");
     printf("2. Diem cuoi ki\n");
     int scoreOption;
@@ -603,7 +633,7 @@ void tim_ten_de_sua_diem(Student* list_name, int numStudents){
     }
 }
 int main(){
-   // Loi_chao();
+   //Loi_chao();
     Tao_data_lop_6A1();   
     while(1){
     system("cls");// xoa moi thu tren man hinh
@@ -628,7 +658,7 @@ int main(){
                     Hien_thi_ds_Hoc_sinh_anpha(numStudents);
                 } else if(sub_Option==3){
                     // 3. Theo ....do doc cac mon
-                    
+                    hienThiDiemTongKet(Hoc_sinh,numStudents);
                 } 
                 else if (sub_Option == 0) {
                     backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính

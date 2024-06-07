@@ -201,20 +201,20 @@ void Tao_data_lop_6A1(){
         .hoten = "Tran Thi Bao",
         .class = "6A1",
         .gender = Female,
-        .birthday = { .day = 20, .month = 5, .year = 2006 },
+        .birthday = { .day = 15, .month = 4, .year = 2006 },
         .subject = {
-            { .subject_name = Maths, .score = { {8.0, 8.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
-            { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Maths, .score = { {8.0, 7.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
+            { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.0, 8.0}, 9.0, 8.7 } },
             { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 8.0, 8.7 } },
             { .subject_name = Informatics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Literatures, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = History, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.9, 8.7 } },
+            { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 7.9, 8.7 } },
             
         }
     };
@@ -299,7 +299,87 @@ void Tao_data_lop_6A1(){
             { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
         }
     };
-    numStudents=6;
+    Hoc_sinh[6]=(Student){
+        .hoten = "Le Khanh Duy",
+        .class = "6A1",
+        .gender = Male,
+        .birthday = { .day = 12, .month = 7, .year = 2006 },
+        .subject = {
+            { .subject_name = Maths, .score = { {8.5, 6, 8.5, 7}, {7.5, 8.0}, 7.8, 8.5 } },
+            { .subject_name = Physics, .score = { {9.0, 6.0, 7.5, 7.5}, {7.0, 7.5}, 9.0, 6.0 } },
+            { .subject_name = Chemistry, .score = { {8.0, 7.0, 7.0, 7.5}, {6.0, 6.5}, 8.0, 8.5 } },
+            { .subject_name = Biology, .score = { {8.0, 8.0, 6.5, 6.5,}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Informatics, .score = { {8.0, 7.0, 7.0, 7.5}, {9.0, 8.5}, 7.5, 6.0 } },
+            { .subject_name = Literatures, .score = { {8.5, 6.0, 8.5, 8.5}, { 6.0, 6.5,}, 7.0, 8.5 } },
+            { .subject_name = History, .score = { {6.0, 7.5, 9.0, 6.0}, {9.0 ,7.5}, 7.9, 8.7 } },
+            { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
+            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = PE, .score = { {9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0 } },
+        }
+    };
+    Hoc_sinh[7]=(Student){
+        .hoten = "Nguyen Hoang Duy",
+        .class = "6A1",
+        .gender = Male,
+        .birthday = { .day = 14, .month = 8, .year = 2006 },
+        .subject = {
+            { .subject_name = Maths, .score = { {9.0, 6.5, 6.0, 7.0}, {7.5, 8.5}, 8.5, 7.5 } },
+            { .subject_name = Physics, .score = { {8.5, 9.0, 9.0, 9.0}, {7.5, 8.0}, 9.0, 6.0 } },
+            { .subject_name = Chemistry, .score = {6.5, 7.0, 7.5, 7.0}, {6.0, 6.5},  8.5, 8.0 } },
+            { .subject_name = Biology, .score = { {8.0, 8.0, 6.5, 6.5,}, {7.5, 8.5}, 7.9, 8.7 } },
+            { .subject_name = Informatics, .score = { {8.0, 6.5, 7.0, 8.5}, {6.0, 8.0}, 7.5, 6.5 } },
+            { .subject_name = Literatures, .score = { {6.0, 9.0, 8.5, 6.5}, { 9.0, 6.5}, 8.5, 7.0 } },
+            { .subject_name = History, .score = { {6.0, 7.0, 9.0, 8.5}, {9.0 ,7.5}, 7.0, 8.0 } },
+            { .subject_name = Geography, .score = { {7.0, 8.0, 9.0, 6.5}, {6.5, 6.0}, 7.5, 9.0 } },
+            { .subject_name = Language, .score = { {6.5, 8.0, 6.5, 8.0}, {7.0, 8.0}, 7.5, 6.5 } },
+            { .subject_name = Moral_Education, .score = { {8.0, 8.5, 6.0, 6.5}, {6.5, 8.5}, 8.5, 6.5 } },
+            { .subject_name = Technical, .score = { {7.5, 6.5, 6.5, 9.0}, { 6.0, 7.5}, 8.0, 8.0 } },
+            { .subject_name = PE, .score = { {6.5, 7.5, 6.5, 8.5}, {8.0, 7.0}, 6.5, 8.0 } },
+        }
+    }; 
+   Hoc_sinh[8]=(Student){
+        .hoten = "Bui Tuan Dat",
+        .class = "6A1",
+        .gender = Male,
+        .birthday = { .day = 2, .month = 4, .year = 2006 },
+        .subject = {
+            { .subject_name = Maths, .score = { {8.0, 8.0, 7.0, 8.5}, {8.5, 8.0} ,7.0, 6.0 },
+            { .subject_name = Physics, .score = { {7.0, 6.5, 8.5, 6.5}, {6.5, 7.0} ,6.0, 6.5 },
+            { .subject_name = Chemistry, .score = {{6.5, 7.0, 7.5, 7.0}, {6.0, 6.5},  8.5, 8.0 } },
+            { .subject_name = Biology, .score = { {8.0, 8.5, 6.0, 7.5}, {7.0, 6.0}, 8.5, 6.0 },
+            { .subject_name = Informatics, .score = { {6.0, 8.0, 9.0, 8.5}, {8.0, 9.0}, 8.5, 8.5 },
+            { .subject_name = Literatures, .score = { {7.5, 8.0, 7.5, 7.5}, {7.0, 8.5}, 6.0, 6.5 },
+            { .subject_name = History, .score = { {9.0, 6.0, 8.5, 8.0},{9.0, 7.0}, 6.5, 6.0 },
+            { .subject_name = Geography, .score = {{7.5, 9.0, 8.5, 7.5}, {8.5, 6.5}, 6.0, 7.5},
+            { .subject_name = Language, .score = {{7.5, 7.0, 6.0, 7.0}, {8.5, 9.0}, 9.0, 8.5},
+            { .subject_name = Moral_Education, .score = { {8.0, 8.0, 8.0, 7.0}, {7.0, 7.5}, 8.0, 8.0 },
+            { .subject_name = Technical, .score = { {8.0, 6.5, 8.0, 7.5}, {7.5, 8.5}, 8.5, 7.5 },
+            { .subject_name = PE, .score = { {8.5, 9.0, 8.0, 6.5}, {8.0, 7.5}, 7.0, 6.0 },
+        }
+    };
+       Hoc_sinh[9]=(Student){
+        .hoten = "Vo Thanh Dat",
+        .class = "6A1",
+        .gender = Male,
+        .birthday = { .day = 20, .month = 10, .year = 2006 },
+        .subject = {
+            { .subject_name = Maths, .score = { {7.0, 6.0, 8.0, 7.5}, {6.0, 6.0}, 6.0, 6.0},
+            { .subject_name = Physics, .score = { {7.0, 6.5, 6.5, 6.5}, {7.5, 7.5}, 9.0, 6.5},
+            { .subject_name = Chemistry, .score = {{6.5, 9.0, 9.0, 9.0}, {8.5, 6.0}, 8.0, 7.0},
+            { .subject_name = Biology, .score = { {6.0, 6.5, 8.0, 6.0}, {6.5, 8.5}, 8.0, 7.5},
+            { .subject_name = Informatics, .score = { {6.5, 9.0, 6.0, 7.0}, {6.5, 8.5}, 6.0, 9.0 },
+            { .subject_name = Literatures, .score = { {8.0, 6.0, 7.0, 6.5}, {6.0, 8.0}, 6.5, 7.5},
+            { .subject_name = History, .score = {{7.5, 6.0, 8.5, 7.5}, {7.5, 6.5}, 7.5, 8.5},
+            { .subject_name = Geography, .score = {{8.0, 6.5, 8.0, 8.5}, {9.0, 6.0}, 7.0, 6.0},
+            { .subject_name = Language, .score = {{6.5, 7.0, 7.5, 6.5}, {9.0, 7.0}, 9.0, 9.0},
+            { .subject_name = Moral_Education, .score = { {9.0, 7.5, 6.0, 8.0}, {8.5, 9.0}, 6.5, 8.0},
+            { .subject_name = Technical, .score = {{6.0, 8.5, 8.5, 8.0}, {7.0, 6.5}, 8.5, 9.0},
+            { .subject_name = PE, .score = {{7.5, 8.0, 7.0, 7.0}, {8.5, 6.0}, 8.0, 8.0},
+        }
+    };
+    numStudents=10;
 }
 void tinhDiem(Student students[], int numStudents) {
     for (int i = 0; i < numStudents; i++) {

@@ -511,8 +511,6 @@ void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop, int sapXepTang) {
         printf("$");
 }
 
-
-
 void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         tinhDiem(Hoc_sinh,numStudents);    
         int indices[MAX_SI_SO];
@@ -633,20 +631,39 @@ void editScoreBySubject_mid_score(Student *student, Subject_name subject, float 
         }
     }
 }
+void editScoreBySubject_mini_test(Student *student, Subject_name subject, float newScore, int a) {
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.test_mini[a] = newScore;
+         
+        }
+    }
+}
+void editScoreBySubject_test_45mins(Student *student, Subject_name subject, float newScore, int a) {
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.test_45mins[a] = newScore;
+         
+        }
+    }
+}
+
 void in_diem_hien_tai_cua_1HS(int subjectOption,int index){
     
     printf("\nDiem mon %s hien tai cua %s la:\n",subjectNameToString(Hoc_sinh[index].subject[subjectOption - 1].subject_name)
                                                 ,Hoc_sinh[index].hoten);
-                                                printf("Diem mini test(4 diem): ");
+    printf("Diem mini test(4 diem): ");
     for (int i = 0; i < 4; i++)
     {
-        printf("%.1f",Hoc_sinh[index].subject->score.test_mini[i]);
+        printf("%.1f",Hoc_sinh[index].subject[subjectOption -1].score.test_mini[i]);
         if(i<3) printf(" ,");
     }
     printf("\nDiem kiem tra 45p (2 diem): ");
     for (int i = 0; i < 2; i++)
     {
-        printf("%.1f",Hoc_sinh[index].subject->score.test_45mins[i]);
+        printf("%.1f",Hoc_sinh[index].subject[subjectOption -1].score.test_45mins[i]);
         if (i<1)
         {
             printf(" ,");
@@ -668,25 +685,49 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
     int subjectOption;
         subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon");
     in_diem_hien_tai_cua_1HS(subjectOption,index);
-    printf("\nChon Diem uon sua:\n");
-    printf("1. Diem giua ki\n");
-    printf("2. Diem cuoi ki\n");
+    printf("\nChon Diem muon sua:\n");
+    printf("0. Thoat\n");
+    printf("1. Diem mini test\n");
+    printf("2. Diem 45 phut\n");
+    printf("3. Diem giua ki\n");
+    printf("4. Diem cuoi ki\n");
     int scoreOption;
-    scoreOption = GetMode("Nhap lua chon[1-2]", "Lua chon");
+    scoreOption = GetMode("Nhap lua chon[0-4]", "Lua chon");
 // Chỉnh sửa điểm của môn học đã chọn
     float newScore;
-    if (scoreOption == 2) {    
-    printf("\nNhap diem cuoi ki moi: ");
-    scanf("%f", &newScore);
-    printf("\n-------Sua diem thanh cong------\n");
-    printf("\nDiem cuoi ki da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption].score.end_term_score,
-                    newScore);
-    editScoreBySubject_end_term_score(&Hoc_sinh[index], subjectOption, newScore);
-    in_diem_hien_tai_cua_1HS(subjectOption,index);
-
-    }
     if (scoreOption==1){
+        printf("\nChon diem mini test muon sua: ");
+        for (int i = 0; i < 4; i++){
+            printf("|%d. %-3.1f",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_mini[i]);
+        }
+        int miniTestOption;
+        miniTestOption = GetMode("Nhap lua chon[1-4]", "Lua chon");
+        printf("\nNhap diem mini test moi: ");
+        scanf("%f", &newScore);
+        printf("\n-------Sua diem thanh cong------\n");
+        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption].score.test_mini[miniTestOption-1],
+                    newScore);
+        editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption, newScore,miniTestOption-1);
+        in_diem_hien_tai_cua_1HS(subjectOption,index);
+    }
+    if (scoreOption==2){
+        printf("\nChon diem 45 phut muon sua: ");
+        for (int i = 0; i < 2; i++){
+            printf("|%d. %-3.1f",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_45mins[i]);
+        }
+        int BigTestOption;
+        BigTestOption = GetMode("Nhap lua chon[1-2]", "Lua chon");
+        printf("\nNhap diem 45 phut moi: ");
+        scanf("%f", &newScore);
+        printf("\n-------Sua diem thanh cong------\n");
+        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption].score.test_45mins[BigTestOption-1],
+                    newScore);
+        editScoreBySubject_test_45mins(&Hoc_sinh[index], subjectOption, newScore, BigTestOption-1);
+        in_diem_hien_tai_cua_1HS(subjectOption,index);
+    }
+    if (scoreOption==3){
         printf("\nNhap diem giua ki moi: ");
         scanf("%f", &newScore);
         printf("\n-------Sua diem thanh cong------\n");
@@ -697,6 +738,17 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
         editScoreBySubject_mid_score(&Hoc_sinh[index], subjectOption, newScore);
         in_diem_hien_tai_cua_1HS(subjectOption,index);
     }
+    if (scoreOption == 4) {    
+    printf("\nNhap diem cuoi ki moi: ");
+    scanf("%f", &newScore);
+    printf("\n-------Sua diem thanh cong------\n");
+    printf("\nDiem cuoi ki da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption].score.end_term_score,
+                    newScore);
+    editScoreBySubject_end_term_score(&Hoc_sinh[index], subjectOption, newScore);
+    in_diem_hien_tai_cua_1HS(subjectOption,index);
+
+    } 
 }
 void tim_ten_de_sua_diem(Student* list_name, int numStudents){
     char search_Last_name[30];

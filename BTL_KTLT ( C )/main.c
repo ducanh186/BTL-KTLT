@@ -123,6 +123,23 @@ void baomat(){
         }
     }
 }
+int compareByDiemTongKet(const void* a, const void* b) {
+    int indexA = *(int*)a;
+    int indexB = *(int*)b;
+
+    float diemTongKetA = ketQuaHocSinh[indexA].diemTongKet;
+    float diemTongKetB = ketQuaHocSinh[indexB].diemTongKet;
+
+    // Sắp xếp giảm dần
+    if (diemTongKetA < diemTongKetB) {
+        return 1; 
+    } else if (diemTongKetA > diemTongKetB) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
 void Loi_chao(){
     printf("------------------CHAO MUNG BAN DEN VOI HE THONG QUAN LY DAO TAO------------------\n");
     printf("----------------------------------------------------------------------------------\n");
@@ -536,31 +553,65 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         printf("$");
 }
 //Ham tách từng thành phần trong tên
+void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
+    tinhDiem(Hoc_sinh,numStudents);
+    int indices[MAX_SI_SO];
+        for (int i = 0; i < numStudents; i++) {
+         indices[i] = i;
+        }
+        qsort(indices, numStudents, sizeof(int), compareByDiemTongKet);
+        printf("\n");
+        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon-1].subject_name));
+        int length = 126;
+        for (int i = 0; i < length; i++) {
+        printf("_");
+        }
+        printf("\n");
+        printf("|STT");
+        char name[] = "Ho va Ten";
+        printf("|%-25s", name);
+        char lop[] ="Lop";
+        printf("|%-5s", lop);
+        char gender[] = "Gioi Tinh";
+        printf("|%-6s",gender);
+        printf("|   Diem mini test  ");
+        printf("|Diem 45 phut ");
+        printf("|Diem giua ki");
+        printf("|Diem cuoi ki");
+        printf("|Trung Binh|\n");
+        for (int i=0;i<para_Si_so_lop;i++){
+        printf("|%-3d",i+1);
+        printf("|%-25s",Hoc_sinh[indices[i]].hoten);// can le tu ben trai sang phai fill 25 ki tu
+                // Ten nguoi thuong ko dai qua 25 ki tu
+        printf("|%-5s",Hoc_sinh[indices[i]].class);
+        printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
+        for(int j=0; j<4; j++){
+            printf("|%-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_mini[j]);
+        }
+        for(int j=0; j<2; j++){
+            printf("|  %-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_45mins[j]);
+        }
 
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.mid_term_score);
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.end_term_score);
+        printf("|    %-6.1f", ketQuaHocSinh[indices[i]].diemTongKet);
+        printf("|\n");
+    }
+        printf("$");
+        int length_1 = 124;
+    for (int i = 0; i < length_1; i++) {
+        printf("~");
+        }
+        printf("$");
+}
 
 // gọi hàm qsort 
 void sort_Students_Alphabetically(Student* list_name, int numStudents) {
     qsort(list_name, numStudents, sizeof(Student), compareNamesByIndex);
 }
 
-int compareByDiemTongKet(const void* a, const void* b) {
-    int indexA = *(int*)a;
-    int indexB = *(int*)b;
 
-    float diemTongKetA = ketQuaHocSinh[indexA].diemTongKet;
-    float diemTongKetB = ketQuaHocSinh[indexB].diemTongKet;
-
-    // Sắp xếp giảm dần
-    if (diemTongKetA < diemTongKetB) {
-        return 1; 
-    } else if (diemTongKetA > diemTongKetB) {
-        return -1;
-    } else {
-        return 0;
-    }
-}
-
-void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop, int sapXepTang) {
+void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
     for (int i = 0; i < numStudents; i++) {
@@ -936,7 +987,7 @@ int main(){
                     hienThiDiemTongKet(Hoc_sinh,numStudents);
                 } else if(sub_Option==4){
                     system("cls");
-                    Hien_thi_ds_Hoc_sinh_theo_DTK(numStudents, 0);
+                    Hien_thi_ds_Hoc_sinh_theo_DTK(numStudents);
                 }
                 else if (sub_Option == 0) {
                     backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
@@ -993,7 +1044,7 @@ int main(){
             }
             else if (sub_Option == 3) {
                 system("cls");
-
+                Hien_thi_ds_Diem_mon_trung_binh(numStudents, subjectOption);
             }
             else if (sub_Option ==0) {
                 backToMainMenu = 1; 

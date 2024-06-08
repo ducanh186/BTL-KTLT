@@ -600,6 +600,17 @@ int searchByLastName(Student* danh_Sach, int numStudents, char* searchName) {
     }
     return -1; // Trả về -1 nếu không tìm thấy
 }
+int searchByName(Student* danh_Sach, int numStudents, char* searchName) {
+    char nameCopy[50];
+    
+    for (int i = 0; i < numStudents; i++) {
+        strcpy(nameCopy,danh_Sach[i].hoten);
+        if (strcmp(nameCopy, searchName) == 0) {
+            return i; // Trả về chỉ số của học sinh nếu tìm thấy
+        }
+    }
+    return -1; // Trả về -1 nếu không tìm thấy
+}
 // Tìm kiếm học sinh theo Họ và tên (FullName)
 int searchByFullName(Student* danhSach, int numStudents, char* searchName) {
     for (int i = 0; i < numStudents; i++) {
@@ -767,6 +778,25 @@ void tim_ten_de_sua_diem(Student* list_name, int numStudents){
         printf("Khong tim thay hoc sinh co ho ten %s.\n", search_Last_name);
     }
 }
+void tim_hoten_de_sua_diem(Student* list_name, int numStudents){
+    char search_name[30];
+    printf("Ten can tim: ");
+    fgets(search_name, sizeof(search_name), stdin);
+    search_name[strcspn(search_name, "\n")] = '\0';
+    /*char res[100] = "";
+    chuanHoaTen(search_name,res);
+    //ket thuc phan nhap 
+    */
+    int index = searchByName(list_name, numStudents, search_name);
+
+    if (index != -1) {
+        printf("\nDa tim thay hoc sinh \"%s !!\"\n",list_name[index].hoten);
+        printf("\n");
+        chon_mon_va_fix_diem(index);
+    } else {
+        printf("Khong tim thay hoc sinh co ho ten %s.\n", search_name);
+    }
+}
 
 
 int main(){
@@ -819,7 +849,7 @@ int main(){
                 Menu_2_1_Display();  
                 tim_ten_de_sua_diem (Hoc_sinh, numStudents);
                 } else if (sub_Option == 2) {
-                    // diem45p
+                tim_hoten_de_sua_diem (Hoc_sinh, numStudents);
                 } else if (sub_Option == 0) {
                     backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
                 } else {

@@ -660,25 +660,34 @@ void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {
 void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     printf("\n");
     // Tiêu đề phiếu báo điểm
-    printf("SỞ GIÁO DỤC VÀ ĐÀO TẠO XXX\t\t\tCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\n");
-    printf("TRƯỜNG THCS XXX XXXX XXXX\t\t\tĐộc lập - Tự do - Hạnh phúc\n");
-    printf("\t\t\t\t\tPHIẾU BÁO ĐIỂM\n");
-    printf("\t\t\t\tHọc kỳ X - Năm học XXXX - XXXX\n\n");
+    printf("SO GIAO DUC DAO TAO XXX\t\t\tCONG HOA XA HOI CHU NGHIA VIET NAM\n");
+    printf("TRUONG THCS XXX XXXX XXXX\t\t\tDoc lap - Tu do - Hanh phuc\n");
+    printf("\t\t\t\t\tPHIEU BAO DIEM\n");
+    printf("\t\t\t\tHoc ky X - Nam hoc XXXX - XXXX\n\n");
 
     // Thông tin cá nhân
-    printf("Họ và tên: %-25s\tNgày sinh: %-10s\tLớp: %s\n", student.hoten, "18/06/2004", student.class);
+    printf("Ho va ten: %-25s\tNgay sinh: %-10s\tLop: %s\n", student.hoten, "18/06/2004", student.class);
 
     // Header bảng điểm (with table formatting)
     
-    printf("|STT\t|Môn học\t|");
+    printf("|STT\t|Mon học\t|");
     for (int j = 1; j <= 4; j++) {
-        printf("Điểm %d\t|", j);
+        printf("Diem %d\t|", j);
     }
-    printf("ĐDGK\t|ĐĐCK\t|TB   |\n");
+    printf("DDGK\t|DDCK\t|TB   |\n");
     
 
     // In điểm từng môn học (with table formatting)
+    float tongDiemTB = 0.0;
     for (int i = 0; i < 12; i++) {
+        
+        // Tính điểm trung bình môn học theo công thức mới
+        diem.diemTrungBinhMonHoc[i] = (S_Aver(student.subject[i].score.test_mini, 4) + 
+                                       S_Aver(student.subject[i].score.test_45mins, 2) * 2 + 
+                                       student.subject[i].score.mid_term_score * 2 + 
+                                       student.subject[i].score.end_term_score * 3) / 9;
+        tongDiemTB += diem.diemTrungBinhMonHoc[i];  // Cộng dồn điểm trung bình
+        
         printf("|%-2d\t|%-10s\t|", i + 1, subjectNameToString(student.subject[i].subject_name));
         for (int j = 0; j < 4; j++) {
             printf("%.1f\t|", student.subject[i].score.test_mini[j]); 
@@ -689,10 +698,31 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
        
     }
 
+    // Tính TBC (trung bình cộng các điểm TB môn học)
+    float TBC = tongDiemTB / 12;
+
+    // Xác định HL và DH dựa trên TBC
+    char HL[15];
+    char DH[15];
+    if (TBC >= 8.0) {
+        strcpy(HL, "Gioi");
+        strcpy(DH, "HSG");
+    } else if (TBC >= 6.5) {
+        strcpy(HL, "Kha");
+        strcpy(DH, "HSK");
+    } else if (TBC >= 5.0) {
+        strcpy(HL, "Trung binh");
+        strcpy(DH, ""); // Để trống DH
+    } else {
+        strcpy(HL, "Yeu");
+        strcpy(DH, "");
+    }
+
     printf("\n");
     // Kết quả học kỳ
-    printf("Tổng kết HK I\t\t\tTBC: %.1f\tHL: Giỏi\tHK: Tốt\tDH: HSG\tNghỉ CP: 0\tNghỉ KP: 0\n", diem.diemTongKet);
+    printf("Tong ket HK I\t\t\tTBC: %.1f\tHL: %s\tHK: Tot\tDH: %s\tNghi CP: 0\tNghi KP: 0\n", TBC, HL, DH); 
 }
+
 
 
     int main(){

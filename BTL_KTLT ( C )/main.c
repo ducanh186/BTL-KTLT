@@ -201,20 +201,20 @@ void Tao_data_lop_6A1(){
         .hoten = "Tran Thi Bao",
         .class = "6A1",
         .gender = Female,
-        .birthday = { .day = 20, .month = 5, .year = 2006 },
+        .birthday = { .day = 15, .month = 4, .year = 2006 },
         .subject = {
-            { .subject_name = Maths, .score = { {8.0, 8.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
-            { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Maths, .score = { {8.0, 7.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
+            { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.0, 8.0}, 9.0, 8.7 } },
             { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 8.0, 8.7 } },
             { .subject_name = Informatics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Literatures, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = History, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 8.7 } },
+            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.9, 8.7 } },
+            { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 7.9, 8.7 } },
             
         }
     };
@@ -299,8 +299,28 @@ void Tao_data_lop_6A1(){
             { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
         }
     };
-    numStudents=6;
-}
+    Hoc_sinh[6]=(Student){
+        .hoten = "Le Khanh Duy",
+        .class = "6A1",
+        .gender = Male,
+        .birthday = { .day = 12, .month = 7, .year = 2006 },
+        .subject = {
+            { .subject_name = Maths, .score = {{8.5, 6, 8.5, 7}, {7.5, 8.0}, 7.8, 8.5}},
+            { .subject_name = Physics, .score = {{9.0, 6.0, 7.5, 7.5}, {7.0, 7.5}, 9.0, 6.0}},
+            { .subject_name = Chemistry, .score = {{8.0, 7.0, 7.0, 7.5}, {6.0, 6.5}, 8.0, 8.5}},
+            { .subject_name = Biology, .score ={{8.0, 8.0, 6.5, 6.5}, {7.3, 8.0}, 7.9, 8.7}},
+            { .subject_name = Informatics, .score ={{8.0, 7.0, 7.0, 7.5}, {9.0, 8.5}, 7.5, 6.0}},
+            { .subject_name = Literatures, .score ={{8.5, 6.0, 8.5, 8.5}, {6.0, 6.5}, 7.0, 8.5}},
+            { .subject_name = History, .score ={{6.0, 7.5, 9.0, 6.0}, {9.0, 7.5}, 7.9, 8.7}},
+            { .subject_name = Geography, .score ={{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7}},
+            { .subject_name = Language, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
+            { .subject_name = Moral_Education, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7}},
+            { .subject_name = Technical, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
+            { .subject_name = PE, .score ={{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}},
+        }};
+  
+    numStudents=7;
+};
 void tinhDiem(Student students[], int numStudents) {
     for (int i = 0; i < numStudents; i++) {
         ketQuaHocSinh[i].diemTongKet = 0;
@@ -632,7 +652,6 @@ void tim_ten_de_sua_diem(Student* list_name, int numStudents){
         printf("Khong tim thay hoc sinh co ho ten %s.\n", search_Last_name);
     }
 }
-
 
 // Hàm in ra phiếu điểm cá nhân của học sinh
 void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {

@@ -680,20 +680,19 @@ void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {
 void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     printf("\n");
     // Tiêu đề phiếu báo điểm
-    printf("SO GIAO DUC VA DAO TAO XXX\t\t\tCONG HOA XA HOI CHU NGHIA VIET NAM\n");
-    printf("TRUONG THCS XXX XXXX XXXX\t\t\tDoc lap - Tu do - Hanh phuc\n");
     printf("\t\t\t\t\tPHIEU BAO DIEM\n");
     printf("\t\t\t\tHoc ky X - Nam hoc XXXX - XXXX\n\n");
 
-    // Thông tin cá nhân
-    printf("Ho và ten: %-25s\tNgay sinh: %-10s\tLop: %s\n", student.hoten, "18/06/2004", student.class);
+    // Thông tin cá nhân (in ngày sinh từ student.birthday)
+    printf("Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\tLop: %s\n", 
+           student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
 
     // Header bảng điểm (with table formatting)
-    printf("|STT\t|Môn học\t|");
+    printf("|STT\t|Mon hoc\t|");
     for (int j = 1; j <= 4; j++) {
-        printf("Điểm %d\t|", j);
+        printf("Diem %d\t|", j);
     }
-    printf("ĐDGK\t|ĐĐCK\t|TB   |\n");
+    printf("DDGK\t|DDCK\t|TB   |\n");
 
     // In điểm từng môn học và tính điểm trung bình 
     float tongDiemTB = 0.0; 

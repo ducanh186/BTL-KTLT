@@ -740,7 +740,7 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     printf("------------------------------------------------------------------------------\n");
     printf("\n");
     // Kết quả học kỳ
-    printf("Tong ket HK I\t\t\tTBC: %.1f\tHL: %s\tHK: Tot\tDH: %s\tNghi CP: 0\tNghi KP: 0\n", TBC, HL, DH); 
+    printf("Tong ket HK I\t\t\tTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
 }
 int main(){
    //Loi_chao();

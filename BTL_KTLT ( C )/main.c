@@ -653,6 +653,94 @@ void tim_ten_de_sua_diem(Student* list_name, int numStudents){
         printf("Khong tim thay hoc sinh co ho ten %s.\n", search_Last_name);
     }
 }
+
+// Hàm in ra phiếu điểm cá nhân của học sinh
+void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {
+    printf("\n");
+    char tieuDe[] = "~~~---DANH SACH HOC SINH---~~~";
+    printf("%40s\n", tieuDe);
+    printf("|STT");
+    char name[] = "Ho va Ten";
+    printf("|%-25s", name);
+    char lop[] = "Lop";
+    printf("|%-5s", lop);
+
+
+    char date[] = "  Ngay Sinh";
+    printf("|%-12s|\n", date);
+
+    for (int i = 0; i < numStudents; i++) {
+        printf("|%-3d", i + 1);
+        printf("|%-25s", list[i].hoten);
+        printf("|%-5s", list[i].class);
+        printf("| %-2d/%-2d/%-5d|\n", list[i].birthday.day, list[i].birthday.month, list[i].birthday.year);
+    }
+}
+
+void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
+    printf("\n");
+    // Tiêu đề phiếu báo điểm
+    printf("SO GIAO DUC VA DAO TAO XXX\t\t\tCONG HOA XA HOI CHU NGHIA VIET NAM\n");
+    printf("TRUONG THCS XXX XXXX XXXX\t\t\tDoc lap - Tu do - Hanh phuc\n");
+    printf("\t\t\t\t\tPHIEU BAO DIEM\n");
+    printf("\t\t\t\tHoc ky X - Nam hoc XXXX - XXXX\n\n");
+
+    // Thông tin cá nhân
+    printf("Ho và ten: %-25s\tNgay sinh: %-10s\tLop: %s\n", student.hoten, "18/06/2004", student.class);
+
+    // Header bảng điểm (with table formatting)
+    printf("|STT\t|Môn học\t|");
+    for (int j = 1; j <= 4; j++) {
+        printf("Điểm %d\t|", j);
+    }
+    printf("ĐDGK\t|ĐĐCK\t|TB   |\n");
+
+    // In điểm từng môn học và tính điểm trung bình 
+    float tongDiemTB = 0.0; 
+    for (int i = 0; i < 12; i++) {
+        // Tính điểm trung bình môn học bằng hàm Aver
+        diem.diemTrungBinhMonHoc[i] = Aver(student.subject[i].score.test_mini,
+                                           student.subject[i].score.test_45mins,
+                                           student.subject[i].score.mid_term_score,
+                                           student.subject[i].score.end_term_score);
+
+        tongDiemTB += diem.diemTrungBinhMonHoc[i];  // Cộng dồn điểm trung bình
+
+        // In điểm từng môn học (giữ nguyên)
+        printf("|%-2d\t|%-10s\t|", i + 1, subjectNameToString(student.subject[i].subject_name));
+        for (int j = 0; j < 4; j++) {
+            printf("%.1f\t|", student.subject[i].score.test_mini[j]); 
+        }
+        printf("%.1f\t|%.1f\t|%.1f |\n", student.subject[i].score.mid_term_score, 
+                                        student.subject[i].score.end_term_score, 
+                                        diem.diemTrungBinhMonHoc[i]);
+        
+    }
+
+    // Tính TBC (trung bình cộng các điểm TB môn học) bằng hàm S_Aver
+    float TBC = S_Aver(diem.diemTrungBinhMonHoc, 12);
+
+    // Xác định HL và DH dựa trên TBC (giữ nguyên)
+    char HL[15];
+    char DH[15];
+    if (TBC >= 8.0) {
+        strcpy(HL, "Gioi");
+        strcpy(DH, "HSG");
+    } else if (TBC >= 6.5) {
+        strcpy(HL, "Kha");
+        strcpy(DH, "HSK");
+    } else if (TBC >= 5.0) {
+        strcpy(HL, "Trung binh");
+        strcpy(DH, ""); // Để trống DH
+    } else {
+        strcpy(HL, "Yeu");
+        strcpy(DH, "");
+    }
+
+    printf("\n");
+    // Kết quả học kỳ
+    printf("Tong ket HK I\t\t\tTBC: %.1f\tHL: %s\tHK: Tot\tDH: %s\tNghi CP: 0\tNghi KP: 0\n", TBC, HL, DH); 
+}
 int main(){
    //Loi_chao();
     Tao_data_lop_6A1();   
@@ -712,7 +800,28 @@ int main(){
             }
     }
     else if(option==3){
-        ///
+         while (1) {
+                system("cls");
+                printf("\n-----HIEN THI DANH SACH HOC SINH----\n");
+                hienThiDanhSachHocSinhCoBan(Hoc_sinh, numStudents); 
+
+                // Nhập STT học sinh để xem điểm chi tiết
+                printf("\nNhap STT hoc sinh de xem diem chi tiet (0 de quay lai): ");
+                int studentIndex;
+                scanf("%d", &studentIndex);
+                while (getchar() != '\n'); // clear input buffer
+
+                if (studentIndex == 0) {
+                    break; // Quay lại menu chính
+                } else if (studentIndex >= 1 && studentIndex <= numStudents) {
+                    inPhieuDiemCaNhan(Hoc_sinh[studentIndex - 1], ketQuaHocSinh[studentIndex - 1], studentIndex);
+                    printf("\nNhan Enter de tiep tuc...");
+                    getchar();
+                } else {
+                    printf("STT khong hop le!\n");
+                }
+            
+        } 
     }
     else if(option==4){
         ///

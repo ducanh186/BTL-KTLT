@@ -318,6 +318,7 @@ void Tao_data_lop_6A1(){
             { .subject_name = Technical, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
             { .subject_name = PE, .score ={{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}},
         }
+    };
   
     numStudents=7;
 }

@@ -688,11 +688,13 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
            student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
 
     // Header bảng điểm (with table formatting)
+    printf("------------------------------------------------------------------------------\n");
     printf("|STT\t|Mon hoc\t|");
     for (int j = 1; j <= 4; j++) {
         printf("Diem %d\t|", j);
     }
     printf("DDGK\t|DDCK\t|TB   |\n");
+    printf("------------------------------------------------------------------------------\n");
 
     // In điểm từng môn học và tính điểm trung bình 
     float tongDiemTB = 0.0; 
@@ -735,7 +737,7 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
         strcpy(HL, "Yeu");
         strcpy(DH, "");
     }
-
+    printf("------------------------------------------------------------------------------\n");
     printf("\n");
     // Kết quả học kỳ
     printf("Tong ket HK I\t\t\tTBC: %.1f\tHL: %s\tHK: Tot\tDH: %s\tNghi CP: 0\tNghi KP: 0\n", TBC, HL, DH); 

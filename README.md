@@ -14,8 +14,8 @@
 ## Tính năng   
 ## 1: Hiển thị danh sách điểm trung bình của cả lớp (Toàn bộ điểm) 
 - ### 1.1: Sắp xếp theo mặc định (Theo danh sách cấp sẵn)
-- ### 1.2: Sắp xếp theo alphabet và ngược lại (A-Z)
-- ### 1.3: Sắp xếp theo điểm tổng kết (từ cao đến thấp và ngược lại)
+- ### 1.2: Sắp xếp theo alphabet (A-Z)
+- ### 1.3: Sắp xếp theo điểm tổng kết (từ cao đến thấp)
 ## 2: Chỉnh sửa điểm ( Bao gồm nhập điểm và sửa điểm )
   - ###      Chọn học sinh muốn sửa điểm bằng cách tìm kiếm theo tên hoặc theo cả họ và tên
 ####  ----------------CHỌN ĐIỂM MUỐN SỬA--------------------

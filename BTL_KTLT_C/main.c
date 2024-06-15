@@ -189,7 +189,6 @@ void Menu_2_1_Display(){
     printf("Vui long nhap ten (Last Name) hoc sinh can sua diem!!\n");
     printf("Vui long nhap ten khong dau\n");
 }
-
 void Menu_4_Display(){
     printf("Chon chuc nang hien thi: \n");
     printf("0. Quay lai Main Menu\n");
@@ -197,12 +196,7 @@ void Menu_4_Display(){
     printf("2. Theo ten alphabet\n");
     printf("3. Theo diem trung binh\n");
 }
-
 int numStudents;
-int Si_so_lop(){
-    return numStudents;
-}
-//Tạo sẵn dữ liệu của học sinh
 void Tao_data_lop_6A1(){
   
      Hoc_sinh[0]=(Student){
@@ -346,8 +340,7 @@ void Tao_data_lop_6A1(){
             { .subject_name = Technical, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
             { .subject_name = PE, .score ={{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}},
         }
-    };
-  
+    }; 
     numStudents=7;
 }
 //Tính điểm tổng kết và trung bình môn của toàn bộ học sinh

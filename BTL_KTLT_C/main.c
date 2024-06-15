@@ -832,9 +832,9 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
             printf("| %d.%s  ", i + 1, subjectNameToString(Hoc_sinh[index].subject[i].subject_name));
         }
     int subjectOption;
-        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12)-1;
-    in_diem_hien_tai_cua_1HS(subjectOption,index);
-    printf("\nChon Diem uon sua:\n");
+        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12);
+    in_diem_hien_tai_cua_1HS(subjectOption-1,index);
+    printf("\nChon Diem muon sua:\n");
     printf("0. Thoat\n");
     printf("1. Diem mini test\n");
     printf("2. Diem 45 phut\n");
@@ -847,7 +847,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
     if (scoreOption==1){
         printf("\nChon diem mini test muon sua:\n ");
         for (int i = 0; i < 4; i++){
-            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption].score.test_mini[i]);
+            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_mini[i]);
         }
         int miniTestOption;
         miniTestOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
@@ -855,10 +855,10 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
         scanf("%f", &newScore);
         printf("\n-------Sua diem thanh cong------\n");
         printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption].score.test_mini[miniTestOption-1],
+                    Hoc_sinh[index].subject[subjectOption-1].score.test_mini[miniTestOption-1],
                     newScore);
-        editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption, newScore,miniTestOption-1);
-        in_diem_hien_tai_cua_1HS(subjectOption,index);
+        editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption-1, newScore,miniTestOption-1);
+        in_diem_hien_tai_cua_1HS(subjectOption-1,index);
     }
     else if (scoreOption==2){
         printf("\nChon diem 45 phut muon sua:\n ");
@@ -1036,7 +1036,7 @@ int main(){
             while (!backToMainMenu) { // Vòng lặp menu con
             printf("\n-----HIEN THI DANH SACH HOC SINH----\n");
             Menu_1_Display();
-                int sub_Option = GetMode("Select mode [0-4]", "Mode selected",4);                              
+                int sub_Option = GetMode("Select mode [0-3]", "Mode selected",3);                              
                 if (sub_Option == 1) {
                     system("cls");
                     // 1. Theo lop    
@@ -1046,11 +1046,8 @@ int main(){
                     // 2. Theo Ten
                     system("cls");                   
                     Hien_thi_ds_Hoc_sinh_anpha(numStudents);
-                } else if(sub_Option==3){
-                    // 3. 
+                } else if(sub_Option==3){               
                     Hien_thi_ds_Hoc_sinh_theo_DTK(numStudents);
-                } else if(sub_Option==4){
-                    // 4.
                 } else if (sub_Option == 0) {
                     backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
                 } else {
@@ -1114,21 +1111,21 @@ int main(){
             for (int i = 0; i < 12; i++) {
             printf("| %d.%s\n", i + 1, subjectNameToString(Hoc_sinh->subject[i].subject_name));
         }
-        int subjectOption = GetMode("Nhap lua chon[0-12]", "Lua chon",12);
-        if (subjectOption > 0 || subjectOption <12) {
+        int subjectOption = GetMode("Nhap lua chon[0-12]", "Lua chon",12) ;
+        if (subjectOption > 0 && subjectOption <=12) {
             Menu_4_Display();
             int sub_Option = GetMode("Nhap lua chon[0-4]", "Lua chon",4);
             if (sub_Option == 1) {
                 system("cls");
-                Hien_thi_ds_Diem_mon(numStudents, subjectOption);
+                Hien_thi_ds_Diem_mon(numStudents, subjectOption-1);
             }
             else if (sub_Option == 2) {
                 system("cls");
-                 Hien_thi_ds_Diem_mon_alpha(numStudents, subjectOption);
+                 Hien_thi_ds_Diem_mon_alpha(numStudents, subjectOption-1);
             }
             else if (sub_Option == 3) {
                 system("cls");
-                Hien_thi_ds_Diem_mon_trung_binh(numStudents, subjectOption);
+                Hien_thi_ds_Diem_mon_trung_binh(numStudents, subjectOption-1);
             }
             else if (sub_Option ==0) {
                 backToMainMenu = 1; 
@@ -1137,12 +1134,14 @@ int main(){
         }
         else if (subjectOption == 0) {
             backToMainMenu = 1;
-        } else {
+        }
+         else {
             printf("Lua chon khong hop le!\n");
         }
         if (backToMainMenu) {
                 break; // Thoát khởi vòng lặp menu chính
                 }
+        
     }
     }
 

@@ -24,7 +24,7 @@ struct Score {
 typedef struct Score Score;
 
 enum Subject_name {
-    Maths=1,
+    Maths,
     Physics,
     Chemistry,
     Biology,
@@ -379,7 +379,7 @@ void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){// Hiện thị mặc 
         char date[] = "Ngay Sinh";
         printf("|%-13s",date);
         for (int i = 0; i < 12; i++) {//In ten cac mon hoc
-        printf("|%-4s", subjectNameToString(i + 1)); 
+        printf("|%-4s", subjectNameToString(i)); 
         }
         printf("|T.K |\n");
     for(int i=0;i<para_Si_so_lop;i++){
@@ -484,7 +484,7 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         char date[] = "Ngay Sinh";
         printf("|%-13s",date);
         for (int i = 0; i < 12; i++) {//In ten cac mon hoc
-        printf("|%-4s", subjectNameToString(i + 1)); 
+        printf("|%-4s", subjectNameToString(i)); 
         }
         printf("|\n");
     for(int i=0;i<para_Si_so_lop;i++){
@@ -515,7 +515,7 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
 void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
         printf("\n");
-        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon-1].subject_name));
+        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
         int length = 126;
         for (int i = 0; i < length; i++) {
         printf("_");
@@ -540,14 +540,14 @@ void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
         printf("|%-5s",Hoc_sinh[i].class);
         printf("|%-9s",Hoc_sinh[i].gender==1?"Nam":"Nu");
         for(int j=0; j<4; j++){
-            printf("|%-4.1f", Hoc_sinh[i].subject[ten_mon-1].score.test_mini[j]);
+            printf("|%-4.1f", Hoc_sinh[i].subject[ten_mon].score.test_mini[j]);
         }
         for(int j=0; j<2; j++){
-            printf("|  %-4.1f", Hoc_sinh[i].subject[ten_mon-1].score.test_45mins[j]);
+            printf("|  %-4.1f", Hoc_sinh[i].subject[ten_mon].score.test_45mins[j]);
         }
 
-        printf("|     %-7.1f", Hoc_sinh[i].subject[ten_mon-1].score.mid_term_score);
-        printf("|     %-7.1f", Hoc_sinh[i].subject[ten_mon-1].score.end_term_score);
+        printf("|     %-7.1f", Hoc_sinh[i].subject[ten_mon].score.mid_term_score);
+        printf("|     %-7.1f", Hoc_sinh[i].subject[ten_mon].score.end_term_score);
         printf("|    %-6.1f", ketQuaHocSinh[i].diemTongKet);
         printf("|\n");
     }
@@ -566,7 +566,7 @@ void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
         }
         qsort(indices, numStudents, sizeof(int), compareByDiemTongKet);
         printf("\n");
-        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon-1].subject_name));
+        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
         int length = 126;
         for (int i = 0; i < length; i++) {
         printf("_");
@@ -591,14 +591,14 @@ void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
         printf("|%-5s",Hoc_sinh[indices[i]].class);
         printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
         for(int j=0; j<4; j++){
-            printf("|%-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_mini[j]);
+            printf("|%-4.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.test_mini[j]);
         }
         for(int j=0; j<2; j++){
-            printf("|  %-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_45mins[j]);
+            printf("|  %-4.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.test_45mins[j]);
         }
 
-        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.mid_term_score);
-        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.end_term_score);
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.mid_term_score);
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.end_term_score);
         printf("|    %-6.1f", ketQuaHocSinh[indices[i]].diemTongKet);
         printf("|\n");
     }
@@ -636,7 +636,7 @@ void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
         char date[] = "Ngay Sinh";
         printf("|%-13s",date);
         for (int i = 0; i < 12; i++) {//In ten cac mon hoc
-        printf("|%-4s", subjectNameToString(i + 1)); 
+        printf("|%-4s", subjectNameToString(i)); 
         }
         printf("|T.K |\n");
     for(int i=0;i<para_Si_so_lop;i++){
@@ -672,7 +672,7 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         }
         qsort(indices, numStudents, sizeof(int), compareNamesByIndex);
         printf("\n");
-        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon-1].subject_name));
+        printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
         int length = 126;
         for (int i = 0; i < length; i++) {
         printf("_");
@@ -697,14 +697,14 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         printf("|%-5s",Hoc_sinh[indices[i]].class);
         printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
         for(int j=0; j<4; j++){
-            printf("|%-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_mini[j]);
+            printf("|%-4.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.test_mini[j]);
         }
         for(int j=0; j<2; j++){
-            printf("|  %-4.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.test_45mins[j]);
+            printf("|  %-4.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.test_45mins[j]);
         }
 
-        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.mid_term_score);
-        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon-1].score.end_term_score);
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.mid_term_score);
+        printf("|     %-7.1f", Hoc_sinh[indices[i]].subject[ten_mon].score.end_term_score);
         printf("|    %-6.1f", ketQuaHocSinh[indices[i]].diemTongKet);
         printf("|\n");
     }
@@ -801,7 +801,7 @@ void editScoreBySubject_test_45mins(Student *student, Subject_name subject, floa
 }
 void in_diem_hien_tai_cua_1HS(int subjectOption,int index){
     
-    printf("\nDiem mon %s hien tai cua %s la:\n",subjectNameToString(Hoc_sinh[index].subject[subjectOption - 1].subject_name)
+    printf("\nDiem mon %s hien tai cua %s la:\n",subjectNameToString(Hoc_sinh[index].subject[subjectOption].subject_name)
                                                 ,Hoc_sinh[index].hoten);
                                                 printf("Diem mini test(4 diem): ");
     for (int i = 0; i < 4; i++)
@@ -832,7 +832,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
             printf("| %d.%s  ", i + 1, subjectNameToString(Hoc_sinh[index].subject[i].subject_name));
         }
     int subjectOption;
-        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12);
+        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12)-1;
     in_diem_hien_tai_cua_1HS(subjectOption,index);
     printf("\nChon Diem uon sua:\n");
     printf("0. Thoat\n");
@@ -841,13 +841,13 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
     printf("3. Diem giua ki\n");
     printf("4. Diem cuoi ki\n");
     int scoreOption;
-    scoreOption = GetMode("Nhap lua chon[1-2]", "Lua chon",2);
+    scoreOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
 // Chỉnh sửa điểm của môn học đã chọn
     float newScore;
     if (scoreOption==1){
-        printf("\nChon diem mini test muon sua: ");
+        printf("\nChon diem mini test muon sua:\n ");
         for (int i = 0; i < 4; i++){
-            printf("|%d. %-3.1f",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_mini[i]);
+            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption].score.test_mini[i]);
         }
         int miniTestOption;
         miniTestOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
@@ -855,15 +855,15 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
         scanf("%f", &newScore);
         printf("\n-------Sua diem thanh cong------\n");
         printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.test_mini[miniTestOption-1],
+                    Hoc_sinh[index].subject[subjectOption].score.test_mini[miniTestOption-1],
                     newScore);
         editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption, newScore,miniTestOption-1);
         in_diem_hien_tai_cua_1HS(subjectOption,index);
     }
     else if (scoreOption==2){
-        printf("\nChon diem 45 phut muon sua: ");
+        printf("\nChon diem 45 phut muon sua:\n ");
         for (int i = 0; i < 2; i++){
-            printf("|%d. %-3.1f",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_45mins[i]);
+            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption].score.test_45mins[i]);
         }
         int BigTestOption;
         BigTestOption = GetMode("Nhap lua chon[1-2]", "Lua chon",2);
@@ -871,7 +871,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
         scanf("%f", &newScore);
         printf("\n-------Sua diem thanh cong------\n");
         printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.test_45mins[BigTestOption-1],
+                    Hoc_sinh[index].subject[subjectOption].score.test_45mins[BigTestOption-1],
                     newScore);
         editScoreBySubject_test_45mins(&Hoc_sinh[index], subjectOption, newScore, BigTestOption-1);
         in_diem_hien_tai_cua_1HS(subjectOption,index);
@@ -881,7 +881,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
         scanf("%f", &newScore);
         printf("\n-------Sua diem thanh cong------\n");
         printf("Diem giua ki da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.mid_term_score,
+                    Hoc_sinh[index].subject[subjectOption].score.mid_term_score,
                     newScore);
 
         editScoreBySubject_mid_score(&Hoc_sinh[index], subjectOption, newScore);
@@ -892,7 +892,7 @@ void chon_mon_va_fix_diem(int index){//Sau khi tim thay
     scanf("%f", &newScore);
     printf("\n-------Sua diem thanh cong------\n");
     printf("\nDiem cuoi ki da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.end_term_score,
+                    Hoc_sinh[index].subject[subjectOption].score.end_term_score,
                     newScore);
     editScoreBySubject_end_term_score(&Hoc_sinh[index], subjectOption, newScore);
     in_diem_hien_tai_cua_1HS(subjectOption,index);

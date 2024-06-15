@@ -975,6 +975,7 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     for (int j = 1; j <= 4; j++) {
         printf("Diem %d\t|", j);
     }
+    printf("45p 1\t|45p 2\t|"); // Thêm tiêu đề cho cột điểm 45 phút
     printf("DDGK\t|DDCK\t|TB   |\n");
     printf("------------------------------------------------------------------------------\n");
 
@@ -989,15 +990,19 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
 
         tongDiemTB += diem.diemTrungBinhMonHoc[i];  // Cộng dồn điểm trung bình
 
-        // In điểm từng môn học (giữ nguyên)
+        // In điểm từng môn học (sửa đổi)
         printf("|%-2d\t|%-10s\t|", i + 1, subjectNameToString(student.subject[i].subject_name));
         for (int j = 0; j < 4; j++) {
             printf("%.1f\t|", student.subject[i].score.test_mini[j]); 
         }
+        // Thêm phần in điểm 45 phút
+        for (int j = 0; j < 2; j++) {  // Vòng lặp để in 2 điểm 45 phút
+            printf("%.1f\t|", student.subject[i].score.test_45mins[j]);
+        }
+
         printf("%.1f\t|%.1f\t|%.1f |\n", student.subject[i].score.mid_term_score, 
                                         student.subject[i].score.end_term_score, 
                                         diem.diemTrungBinhMonHoc[i]);
-        
     }
 
     // Tính TBC (trung bình cộng các điểm TB môn học) bằng hàm S_Aver

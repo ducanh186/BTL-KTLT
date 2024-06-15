@@ -1025,7 +1025,7 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     printf("Tong ket HK I\t\t\tTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
 }
 int main(){
-   //Loi_chao();
+    baomat();
     Tao_data_lop_6A1();   
     while(1){
     system("cls");// xoa moi thu tren man hinh

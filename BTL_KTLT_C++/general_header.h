@@ -264,6 +264,149 @@ void Menu_4_Display(){
 Student Hoc_sinh[7]; // Giả sử có tối đa 7 học sinh
 int numStudents = 0;
 
+void Student::Tao_data_lop_6A1() {
+    Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Nguyen Van An", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Male;
+Hoc_sinh[numStudents].birthday = {20, 5, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{4.0, 5.5, 7.0, 7.5}, {6.5, 8.0}, 7.8, 9.5 } }; 
+Hoc_sinh[numStudents].subject[1] = {Physics, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } };
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{5.5, 5.0, 7.5, 7.7}, {3.3, 8.0}, 4.9, 6.7 } };
+Hoc_sinh[numStudents].subject[3] = {Biology, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } };
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 8.9, 6.0 } };
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{7.5, 6.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[6] = {History, {{7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 8.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[8] = {Language, {{3.5, 7.0, 3.5, 5.7}, {7.3, 8.0}, 6.9, 8.7 } };
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.7 } };
+Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 4.3, 8.5, 7.7}, {7.3, 8.0}, 8.9, 8.7 } };
+Hoc_sinh[numStudents].subject[11] = {PE, {{9.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 5.9, 8.7 } };
+numStudents++;
+
+// Học sinh thứ hai: Trần Thị Bảo
+    Hoc_sinh[numStudents].hoten[0] = '\0';  // Xóa dữ liệu cũ (nếu có)
+    strncpy(Hoc_sinh[numStudents].hoten, "Tran Thi Bao", 29); 
+    strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+    Hoc_sinh[numStudents].gender = Female;
+    Hoc_sinh[numStudents].birthday = {15, 4, 2013}; 
+    Hoc_sinh[numStudents].subject[0] = {Maths, {{8.0, 6.5, 6.0, 7.5}, {8.5, 4.0}, 8.8, 8.5 } }; 
+    Hoc_sinh[numStudents].subject[1] = {Physics, {{7.5, 7.0, 9.5, 7.7}, {7.0, 8.0}, 9.0, 8.7 } };
+    Hoc_sinh[numStudents].subject[2] = {Chemistry, {{7.5, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } };
+    Hoc_sinh[numStudents].subject[3] = {Biology, {{7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 8.0, 8.7 } };
+    Hoc_sinh[numStudents].subject[4] = {Informatics, {{7.5, 7.0, 3.5, 7.7}, {7.3, 3.4}, 7.9, 8.7 } };
+    Hoc_sinh[numStudents].subject[5] = {Literatures, {{7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 9.9, 8.7 } };
+    Hoc_sinh[numStudents].subject[6] = {History, {{7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 5.9, 4.7 } };
+    Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } };
+    Hoc_sinh[numStudents].subject[8] = {Language, {{7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } };
+    Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 7.7 } };
+    Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.3, 5.7 } };
+    Hoc_sinh[numStudents].subject[11] = {PE, {{7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 2.9, 0.7 } };
+    numStudents++;
+
+
+// Học sinh thứ ba: Lê Văn Canh
+Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Le Van Canh", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Male;
+Hoc_sinh[numStudents].birthday = {10, 8, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{8.0, 1.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } }; 
+Hoc_sinh[numStudents].subject[1] = {Physics, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } };
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } };
+Hoc_sinh[numStudents].subject[3] = {Biology, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } };
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{7.5, 7.0, 1.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.7 } };
+Hoc_sinh[numStudents].subject[6] = {History, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } };
+Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } };
+Hoc_sinh[numStudents].subject[8] = {Language, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.5 } };
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.5 } };
+Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } };
+Hoc_sinh[numStudents].subject[11] = {PE, {{4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } };
+numStudents++; 
+
+// Học sinh thứ tư: Phạm Thị Đào
+Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Pham Thi Dao", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Female;
+Hoc_sinh[numStudents].birthday = {25, 12, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{8.0, 8.5, 7.0, 8.0}, {1.5, 8.0}, 7.8, 8.5 } }; 
+Hoc_sinh[numStudents].subject[1] = {Physics, {{8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } };
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.6 } };
+Hoc_sinh[numStudents].subject[3] = {Biology, {{5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 6.6 } };
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.6 } };
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.6 } };
+Hoc_sinh[numStudents].subject[6] = {History, {{7.5, 5.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.6 } };
+Hoc_sinh[numStudents].subject[7] = {Geography, {{1.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.6 } };
+Hoc_sinh[numStudents].subject[8] = {Language, {{9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.9} };
+Hoc_sinh[numStudents].subject[10] = {Technical, {{4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } };
+Hoc_sinh[numStudents].subject[11] = {PE, {{6.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+numStudents++; 
+
+// Học sinh thứ năm: Nguyễn Thị Emass
+Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Nguyen Thi Emass", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Female;
+Hoc_sinh[numStudents].birthday = {20, 5, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{8.0, 9.5, 7.0, 9.5}, {7.5, 8.0}, 7.8, 8.5 } }; 
+Hoc_sinh[numStudents].subject[1] = {Physics, {{6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{7.5, 7.0, 9.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[3] = {Biology, {{3.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[6] = {History, {{6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[8] = {Language, {{7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } };
+Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 7.0, 9.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[11] = {PE, {{10.0, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+numStudents++; 
+
+// Học sinh thứ sáu: Nguyễn Văn Anh 
+Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Nguyen Van Anh", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Male;
+Hoc_sinh[numStudents].birthday = {20, 5, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{8.0, 10.0, 7.0, 2.0}, {4.8, 8.0}, 7.8, 4.5 } }; 
+Hoc_sinh[numStudents].subject[1] = {Physics, {{6.8, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{7.5, 7.0, 8.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[3] = {Biology, {{7.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{4.6, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{3.4, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[6] = {History, {{7.5, 7.0, 5.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[8] = {Language, {{7.5, 7.0, 7.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } };
+Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+Hoc_sinh[numStudents].subject[11] = {PE, {{7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } };
+numStudents++; 
+
+// Học sinh thứ bảy: Lê Khánh Duy
+Hoc_sinh[numStudents].hoten[0] = '\0'; // Xóa dữ liệu cũ (nếu có)
+strncpy(Hoc_sinh[numStudents].hoten, "Le Khanh Duy", 29); 
+strncpy(Hoc_sinh[numStudents].lop, "6A1", 9);  
+Hoc_sinh[numStudents].gender = Male;
+Hoc_sinh[numStudents].birthday = {12, 7, 2013}; 
+Hoc_sinh[numStudents].subject[0] = {Maths, {{8.5, 6.0, 8.5, 7.0}, {7.5, 8.0}, 7.8, 8.5}};
+Hoc_sinh[numStudents].subject[1] = {Physics, {{9.0, 6.0, 7.5, 7.5}, {7.0, 7.5}, 9.0, 6.0}};
+Hoc_sinh[numStudents].subject[2] = {Chemistry, {{8.0, 7.0, 7.0, 7.5}, {6.0, 6.5}, 8.0, 8.5}};
+Hoc_sinh[numStudents].subject[3] = {Biology, {{8.0, 8.0, 6.5, 6.5}, {7.3, 8.0}, 7.9, 8.7}};
+Hoc_sinh[numStudents].subject[4] = {Informatics, {{8.0, 7.0, 7.0, 7.5}, {9.0, 8.5}, 7.5, 6.0}};
+Hoc_sinh[numStudents].subject[5] = {Literatures, {{8.5, 6.0, 8.5, 8.5}, {6.0, 6.5}, 7.0, 8.5}};
+Hoc_sinh[numStudents].subject[6] = {History, {{6.0, 7.5, 9.0, 6.0}, {9.0, 7.5}, 7.9, 8.7}};
+Hoc_sinh[numStudents].subject[7] = {Geography, {{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7}};
+Hoc_sinh[numStudents].subject[8] = {Language, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}};
+Hoc_sinh[numStudents].subject[9] = {Moral_Education, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7}};
+Hoc_sinh[numStudents].subject[10] = {Technical, {{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}};
+Hoc_sinh[numStudents].subject[11] = {PE, {{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}};
+numStudents++; 
+    
+}
+
 // Hàm bạn (friend function) có thể truy cập thành viên private của Student và Diem
 void tinhDiem() { 
     for (int i = 0; i < numStudents; i++) {

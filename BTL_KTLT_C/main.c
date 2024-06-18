@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifdef _WIN32 // Nếu là Windows
+    #define CLEAR_SCREEN "cls"// clear màn hình
+#else // Nếu là macOS, Linux, etc.
+    #define CLEAR_SCREEN "clear"
+#endif
 #define MAX_SI_SO 100
 enum Gender {
     Male=1,
@@ -105,13 +110,13 @@ float Aver(float mini[4],float test45[2], float mid, float end){
     sum+=end*3;// finalterm test hệ số 3
     return sum/8;
 }
+//Hàm so sánh điểm tổng kết
 int compareByDiemTongKet(const void* a, const void* b) {
     int indexA = *(int*)a;
     int indexB = *(int*)b;
 
     float diemTongKetA = ketQuaHocSinh[indexA].diemTongKet;
     float diemTongKetB = ketQuaHocSinh[indexB].diemTongKet;
-
     // Sắp xếp giảm dần
     if (diemTongKetA < diemTongKetB) {
         return 1; 
@@ -153,15 +158,15 @@ int GetMode(char* input_prompt, char* confirm_message, int max_op) {
     int option = 0;// 0 để exit 
     do {
         printf("\n%s: ", input_prompt);
-        scanf("%d", &option); // Read the selected mode from the user
-        while (getchar() != '\n'); // Clear the input buffer. Input buffer always end with Enter ('\n')
+        scanf("%d", &option); // Đọc lựa chọn của người dùng
+        while (getchar() != '\n'); // Xóa bộ nhớ đệm, input luôn có Enter ('\n')
         printf("\n%s: %d\n",confirm_message, option);
-     // Display the confirmed mode to the user
-    } while(!(option >= 0 && option <= max_op)); // Repeat until a valid mode is selected
+     // Xác nhận lại lụa chọn của người dùng
+    } while(!(option >= 0 && option <= max_op)); // Lặp lại đến khi đúng 
 
     return  option;
 }
-
+//Hàm Hiển thị Main Menu
 void Main_Menu_Display(){
     printf("\t\tCHAO MUNG DEN VOI\n");
     printf("\tHe thong quan ly dao tao truong THCS\n");
@@ -177,6 +182,7 @@ void Main_Menu_Display(){
     printf("6. Xuat Du lieu thanh file .txt\n");
 
 }
+// Hàm hiển thị các chức năng của 1.
 void Menu_1_Display(){
     printf("Chon chuc nang hien thi: \n");
     printf("0. Quay lai Main Menu\n");
@@ -185,16 +191,19 @@ void Menu_1_Display(){
     printf("3. Theo diem tong ket\n");
 
 }
+// Hàm hiển thị các chức năng của 2.
 void Menu_2_Display(){
     printf("\nCHON CHUC NANG TIM KIEM DE SUA DIEM :\n");
     printf("0. Quay lai Main Menu\n");
     printf("1. Theo ten (Last Name)\n");
     printf("2. Theo Ho va ten (Full Name)\n");
 }
+// Hàm hiển thị các chức năng của 2.1
 void Menu_2_1_Display(){
     printf("Vui long nhap ten (Last Name) hoc sinh can sua diem!!\n");
     printf("Vui long nhap ten khong dau\n");
 }
+// Hàm hiển thị các chức năng của 4.
 void Menu_4_Display(){
     printf("Chon chuc nang hien thi: \n");
     printf("0. Quay lai Main Menu\n");
@@ -203,7 +212,7 @@ void Menu_4_Display(){
     printf("3. Theo diem trung binh\n");
 }
 int numStudents;
-void Tao_data_lop_6A1(){
+void Tao_data_lop_6A1(){// Hàm tạo sẵn các dữ liệu của học sinh 
   
      Hoc_sinh[0]=(Student){
         .hoten = "Nguyen Van An",
@@ -364,7 +373,61 @@ void tinhDiem(Student students[], int numStudents) {
         ketQuaHocSinh[i].diemTongKet/=12;
     }
 }
-// Hàm hiện thị cho chức năng 1.1
+//Hàm tách từng thành phần trong tên
+void splitName(char* fullName, char** firstName, char** middleName, char** lastName) {
+    char* tokens[10];  // Mảng chứa các từ trong tên
+    int tokenCount = 0;
+    // Tách tên thành các từ
+    char* token = strtok(fullName, " ");
+    while (token != NULL) {
+        tokens[tokenCount++] = token;
+        token = strtok(NULL, " ");
+    }
+    // Xử lý các phần của tên
+    if (tokenCount >= 3) {
+        *firstName = tokens[0];  // Họ
+        *middleName = tokens[1];  // Tên đệm (trường hợp này chỉ lấy 1 từ đầu tiên của tên đệm)
+        *lastName = tokens[tokenCount - 1];  // Tên
+    } else if (tokenCount == 2) {
+        *firstName = tokens[0];
+        *middleName = "";
+        *lastName = tokens[1];
+    } else {
+        *firstName = "";
+        *middleName = "";
+        *lastName = tokens[0];
+    }
+}
+//So sánh tên theo từng phần một
+int compareNames(const void* a, const void* b) {//hàm so sánh Họ và tên để sắp xếp
+    Student* studentA = (Student*)a;
+    Student* studentB = (Student*)b;
+
+    char nameCopy1[50], nameCopy2[50];
+    char *firstName1, *middleName1, *lastName1;
+    char *firstName2, *middleName2, *lastName2;
+
+    strcpy(nameCopy1, studentA->hoten);
+    strcpy(nameCopy2, studentB->hoten);
+
+    splitName(nameCopy1, &firstName1, &middleName1, &lastName1);
+    splitName(nameCopy2, &firstName2, &middleName2, &lastName2);
+
+    int cmpLastName = strcmp(lastName1, lastName2);// So sánh tên trước 
+    if (cmpLastName != 0) return cmpLastName;// nếu khác nhau thì dừng
+
+    int cmpFirstName = strcmp(firstName1, firstName2);// sau dó so sánh họ
+    if (cmpFirstName != 0) return cmpFirstName;
+
+    return strcmp(middleName1, middleName2);
+}
+int compareNamesByIndex(const void* a, const void* b) {// hàm để sắp xếp theo index của mảng
+    int indexA = *(int*)a;
+    int indexB = *(int*)b;
+    return compareNames(&Hoc_sinh[indexA], &Hoc_sinh[indexB]);
+}
+// Chức năng 1.
+// Hàm  cho chức năng 1.1
 void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){// Hiện thị mặc định theo thứ tự của mảng có sẵn
         tinhDiem(Hoc_sinh,numStudents);
         printf("\n");
@@ -413,60 +476,8 @@ void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){// Hiện thị mặc 
         }
         printf("$");
 }
-//Ham tách từng thành phần trong tên
-void splitName(char* fullName, char** firstName, char** middleName, char** lastName) {
-    char* tokens[10];  // Mảng chứa các từ trong tên
-    int tokenCount = 0;
-    // Tách tên thành các từ
-    char* token = strtok(fullName, " ");
-    while (token != NULL) {
-        tokens[tokenCount++] = token;
-        token = strtok(NULL, " ");
-    }
-    // Xử lý các phần của tên
-    if (tokenCount >= 3) {
-        *firstName = tokens[0];  // Họ
-        *middleName = tokens[1];  // Tên đệm (trường hợp này chỉ lấy 1 từ đầu tiên của tên đệm)
-        *lastName = tokens[tokenCount - 1];  // Tên
-    } else if (tokenCount == 2) {
-        *firstName = tokens[0];
-        *middleName = "";
-        *lastName = tokens[1];
-    } else {
-        *firstName = "";
-        *middleName = "";
-        *lastName = tokens[0];
-    }
-}
-//So sánh tên theo từng phần 1 để cho vào hàm qsort
-int compareNames(const void* a, const void* b) {//hàm so sánh Họ và tên để sắp xếp
-    Student* studentA = (Student*)a;
-    Student* studentB = (Student*)b;
-
-    char nameCopy1[50], nameCopy2[50];
-    char *firstName1, *middleName1, *lastName1;
-    char *firstName2, *middleName2, *lastName2;
-
-    strcpy(nameCopy1, studentA->hoten);
-    strcpy(nameCopy2, studentB->hoten);
-
-    splitName(nameCopy1, &firstName1, &middleName1, &lastName1);
-    splitName(nameCopy2, &firstName2, &middleName2, &lastName2);
-
-    int cmpLastName = strcmp(lastName1, lastName2);// So sánh tên trước 
-    if (cmpLastName != 0) return cmpLastName;// nếu khác nhau thì dừng
-
-    int cmpFirstName = strcmp(firstName1, firstName2);// sau dó so sánh họ
-    if (cmpFirstName != 0) return cmpFirstName;
-
-    return strcmp(middleName1, middleName2);
-}
-int compareNamesByIndex(const void* a, const void* b) {// hàm để sắp xếp theo index của mảng
-    int indexA = *(int*)a;
-    int indexB = *(int*)b;
-    return compareNames(&Hoc_sinh[indexA], &Hoc_sinh[indexB]);
-}
-// Hiện thị theo thứ tự các alphabet(chức năng 1.2)
+// Hết chức năng 1.1
+// Hiện thị chức năng 1.2
 void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         int indices[MAX_SI_SO];//Tạo mảng tạm để ko làm thay đổi dữ liệu gốc của mảng
         for (int i = 0; i < numStudents; i++) {
@@ -517,7 +528,461 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         }
         printf("$");
 }
-//hết xếp hs theo tên
+//hết Chức năng 1.2
+//Hàm chức nằng 1.3
+void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
+    tinhDiem(Hoc_sinh,numStudents);
+    int indices[MAX_SI_SO];
+    for (int i = 0; i < numStudents; i++) {
+        indices[i] = i;
+    }
+    // Sắp xếp mảng chỉ mục theo điểm tổng kết
+    qsort(indices, numStudents, sizeof(int), compareByDiemTongKet);
+        printf("\n");
+        char tieude[]="~~~---DANH SACH HOC SINH---~~~";
+        printf("%70s\n",tieude);
+        int length = 126;
+        for (int i = 0; i < length; i++) {
+        printf("_");
+        }
+        printf("\n");
+        printf("|STT");
+        char name[] = "Ho va Ten";
+        printf("|%-25s", name);
+        char lop[] ="Lop";
+        printf("|%-5s", lop);
+        char gender[] = "Gioi Tinh";
+        printf("|%-6s",gender);
+        char date[] = "Ngay Sinh";
+        printf("|%-13s",date);
+        for (int i = 0; i < 12; i++) {//In ten cac mon hoc
+        printf("|%-4s", subjectNameToString(i)); 
+        }
+        printf("|T.K |\n");
+    for(int i=0;i<para_Si_so_lop;i++){
+        printf("|%-3d",i+1);
+        printf("|%-25s",Hoc_sinh[indices[i]].hoten);// can le tu ben trai sang phai fill 25 ki tu
+                // Ten nguoi thuong ko dai qua 25 ki tu
+        printf("|%-5s",Hoc_sinh[indices[i]].class);
+        printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
+        printf("| %-2d",Hoc_sinh[indices[i]].birthday.day);
+        printf("/%-2d",Hoc_sinh[indices[i]].birthday.month);
+        printf("/%-5d ",Hoc_sinh[indices[i]].birthday.year);
+        for (int j=0; j<12; j++){
+        printf("|%-4.1f", Aver(Hoc_sinh[indices[i]].subject[j].score.test_mini,
+                                Hoc_sinh[indices[i]].subject[j].score.test_45mins,
+                                Hoc_sinh[indices[i]].subject[j].score.mid_term_score,
+                                Hoc_sinh[indices[i]].subject[j].score.end_term_score ));
+                }
+        printf("|%-4.1f", ketQuaHocSinh[indices[i]].diemTongKet);
+        printf("|\n");
+    }
+        printf("$");
+        int length_1 = 124;
+    for (int i = 0; i < length_1; i++) {
+        printf("~");
+        }
+        printf("$");
+}//Hết chức năng 1.3
+// Hết chức năng 1.3
+//Hết chức năng 1.
+//Chức năng 2.
+//Hàm này chuẩn hóa từng từ : liNH => Linh
+char* chuanHoaTu(char *s){
+    s[0] = toupper(s[0]);
+    for(int i = 1; i < (int)strlen(s); i++){
+        s[i] = tolower(s[i]);
+    }
+    return s;
+}//Hàm này tách tên thành các token sau đó chuẩn hóa từng token rồi gắn lại các token
+char *chuanHoaTen(char *s, char *res){
+    char *token = strtok(s, " ");
+    while(token != NULL){
+        //nối từ vào chuỗi kết quả res
+        strcat(res, chuanHoaTu(token));
+        token = strtok(NULL, " ");
+        //Nếu chưa phải từ cuối thì nối thêm dấu cách
+        if(token != NULL){
+            strcat(res, " ");
+        }
+    }
+    return res;
+}
+//Hàm Tìm kiếm học sinh theo tên học sinh(An, Bảo)
+int searchByLastName(Student* danh_Sach, int numStudents, char* searchName) {
+    char nameCopy[50];
+    
+    for (int i = 0; i < numStudents; i++) {
+        strcpy(nameCopy,danh_Sach[i].hoten);
+        char *firstName, *middleName, *lastName;
+        splitName(nameCopy, &firstName, &middleName, &lastName);
+        if (strcmp(lastName, searchName) == 0) {
+            return i; // Trả về chỉ số của học sinh nếu tìm thấy
+        }
+    }
+    return -1; // Trả về -1 nếu không tìm thấy
+}
+// Tìm kiếm học sinh theo Họ và tên (FullName)
+int searchByFullName(Student* danhSach, int numStudents, char* searchName) {
+    for (int i = 0; i < numStudents; i++) {
+        if (strcmp(danhSach[i].hoten, searchName) == 0) {
+            return i; // Trả về chỉ số của học sinh nếu tìm thấy
+        }
+    }
+    return -1; // Trả về -1 nếu không tìm thấy
+}
+//hàm sửa điểm thi cuối kì của 1 môn
+void editScoreBySubject_end_term_score(Student *student, Subject_name subject, float newScore) {
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.end_term_score = newScore;
+            
+        }
+    }
+}
+//hàm sửa điểm thi giữa kì của 1 môn
+void editScoreBySubject_mid_score(Student *student, Subject_name subject, float newScore) {
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.mid_term_score = newScore;
+         
+        }
+    }
+}
+//hàm sửa điểm mini test của 1 môn
+void editScoreBySubject_mini_test(Student *student, Subject_name subject, float newScore, int a) {
+    //"a" Là điểm thứ a cần sửa ( a=1,2,3,4)
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.test_mini[a] = newScore;
+         
+        }
+    }
+}
+//hàm sửa điểm kiểm tra 45 phút của 1 môn
+void editScoreBySubject_test_45mins(Student *student, Subject_name subject, float newScore, int a) {
+    //"a" Là điểm thứ a cần sửa ( a=1,2)
+    for (int i = 0; i < 12; i++) {
+        if (student->subject[i].subject_name == subject) {
+            // Tìm thấy môn học cần sửa điểm
+            student->subject[i].score.test_45mins[a] = newScore;
+         
+        }
+    }
+}
+//Hàm này sẽ in ra điểm của một môn của một học sinh
+void in_diem_hien_tai_cua_1HS(int subjectOption,int index){
+    
+    printf("\nDiem mon %s hien tai cua %s la:\n"
+                            ,subjectNameToString(Hoc_sinh[index].subject[subjectOption].subject_name)
+                            ,Hoc_sinh[index].hoten);
+    printf("Diem mini test(4 diem): ");
+    for (int i = 0; i < 4; i++)
+    {
+        printf("%.1f",Hoc_sinh[index].subject[subjectOption].score.test_mini[i]);
+        if(i<3) printf(" ,");
+    }
+    printf("\nDiem kiem tra 45p (2 diem): ");
+    for (int i = 0; i < 2; i++)
+    {
+        printf("%.1f",Hoc_sinh[index].subject[subjectOption].score.test_45mins[i]);
+        if (i<1)
+        {
+            printf(" ,");
+        }   
+    }
+     printf("\n") ; 
+    printf("Diem kiem tra giua ky: %.1f\n",Hoc_sinh[index].subject[subjectOption].score.mid_term_score);
+    printf("Diem kiem tra cuoi ky: %.1f\n",Hoc_sinh[index].subject[subjectOption].score.end_term_score);   
+    }
+//Hàm này sẽ nhận môn mà người dung muốn sửa điểm và chọn điểm cần sửa
+void chon_mon_va_fix_diem(int index){//Sau khi tìm thấy tên học sinh cần sửa 
+    printf("Chon mon hoc can chinh sua diem:\n");
+        for (int i = 0; i < 12; i++) {
+            printf("| %d.%s  ", i + 1, subjectNameToString(Hoc_sinh[index].subject[i].subject_name));
+        }
+    int subjectOption;
+        //Chọn môn cần sửa
+        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12);
+    in_diem_hien_tai_cua_1HS(subjectOption-1,index);//In điểm hiện tại của học sinh đó để người dùng kiểm tra 
+    printf("\nChon Diem muon sua:\n");
+    printf("0. Thoat\n");
+    printf("1. Diem mini test\n");
+    printf("2. Diem 45 phut\n");
+    printf("3. Diem giua ki\n");
+    printf("4. Diem cuoi ki\n");
+    int scoreOption;
+    //Nhập điểm cần sửa (1-4)
+    scoreOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
+// Chỉnh sửa điểm của môn học đã chọn
+    float newScore;
+    if (scoreOption==1){
+        printf("\nChon diem mini test muon sua:\n ");//Chọn điểm minitest muốn sửa
+        for (int i = 0; i < 4; i++){
+            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_mini[i]);
+        }
+        int miniTestOption;
+        miniTestOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
+        printf("\nNhap diem mini test moi: ");
+        scanf("%f", &newScore);//Nhập điểm mới
+        printf("\n-------Sua diem thanh cong------\n");
+        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption-1].score.test_mini[miniTestOption-1],
+                    newScore);//Thông báo đã sửa điểm thành công
+        editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption-1, newScore,miniTestOption-1);
+        in_diem_hien_tai_cua_1HS(subjectOption-1,index);
+    }
+    else if (scoreOption==2){
+        printf("\nChon diem 45 phut muon sua:\n ");
+        for (int i = 0; i < 2; i++){
+            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption].score.test_45mins[i]);
+        }
+        int BigTestOption;
+        BigTestOption = GetMode("Nhap lua chon[1-2]", "Lua chon",2);
+        printf("\nNhap diem 45 phut moi: ");
+        scanf("%f", &newScore);
+        printf("\n-------Sua diem thanh cong------\n");
+        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption].score.test_45mins[BigTestOption-1],
+                    newScore);
+        editScoreBySubject_test_45mins(&Hoc_sinh[index], subjectOption, newScore, BigTestOption-1);
+        in_diem_hien_tai_cua_1HS(subjectOption,index);
+    }
+    else if (scoreOption==3){
+        printf("\nNhap diem giua ki moi: ");
+        scanf("%f", &newScore);
+        printf("\n-------Sua diem thanh cong------\n");
+        printf("Diem giua ki da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption-1].score.mid_term_score,
+                    newScore);
+
+        editScoreBySubject_mid_score(&Hoc_sinh[index], subjectOption-1, newScore);
+        in_diem_hien_tai_cua_1HS(subjectOption-1,index);
+    }
+    else if (scoreOption == 4) {    
+    printf("\nNhap diem cuoi ki moi: ");
+    scanf("%f", &newScore);
+    printf("\n-------Sua diem thanh cong------\n");
+    printf("\nDiem cuoi ki da duoc sua: %.1f ==> %.1f\n",
+                    Hoc_sinh[index].subject[subjectOption-1].score.end_term_score,
+                    newScore);
+    editScoreBySubject_end_term_score(&Hoc_sinh[index], subjectOption-1, newScore);
+    in_diem_hien_tai_cua_1HS(subjectOption-1,index);
+
+    } 
+    else{
+        printf("Khong co lua chon nay. Vui long nhap lai.\n");
+    }
+}
+//Hàm Nhập tên học sinh cần sửa
+void tim_ten_de_sua_diem(Student* list_name, int numStudents){
+    printf("Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD: liNH-> Linh)\n");
+    char search_Last_name[10];
+    printf("Ten can tim: ");
+    fgets(search_Last_name, sizeof(search_Last_name), stdin);
+    search_Last_name[strcspn(search_Last_name, "\n")] = '\0';
+    chuanHoaTu(search_Last_name);
+    //ket thuc phan nhap 
+    int index = searchByLastName(list_name, numStudents, search_Last_name);
+
+    if (index != -1) {//Tìm thấy học sinh cần sửa
+        printf("\nDa tim thay hoc sinh \"%s !!\"\n",list_name[index].hoten);
+        printf("\n");
+        chon_mon_va_fix_diem(index);
+    } else {
+        printf("Khong tim thay hoc sinh co ho ten %s.\n", search_Last_name);
+    }
+}
+//Hàm tìm họ và tên học sinh cần sửa điểm
+void tim_hoten_de_sua_diem(Student* list_name, int numStudents){
+    printf("Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD:ngUYEN liNH-> Nguyen Linh)\n");
+    char search_name[30];
+    printf("Ten can tim: ");
+    fgets(search_name, sizeof(search_name), stdin);
+    search_name[strcspn(search_name, "\n")] = '\0';
+    char res[100] = "";
+    char *name=chuanHoaTen(search_name,res);
+    int index = searchByFullName(list_name, numStudents, name);
+
+    if (index != -1) {
+        printf("\nDa tim thay hoc sinh \"%s !!\"\n",list_name[index].hoten);
+        printf("\n");
+        chon_mon_va_fix_diem(index);
+    } else {
+        printf("Khong tim thay hoc sinh co ho ten %s.\n", name);
+    }
+}
+//Hết chức năng 2
+//Chức năng 3.
+// Hàm hiển thị danh sách học sinh (Thông tin cơ bản)
+void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {
+    printf("\n");
+    char tieuDe[] = "~~~---DANH SACH HOC SINH---~~~";
+    printf("%40s\n", tieuDe);
+    printf("|STT");
+    char name[] = "Ho va Ten";
+    printf("|%-25s", name);
+    char lop[] = "Lop";
+    printf("|%-5s", lop);
+    char date[] = "  Ngay Sinh";
+    printf("|%-12s|\n", date);
+    for (int i = 0; i < numStudents; i++) {
+        printf("|%-3d", i + 1);
+        printf("|%-25s", list[i].hoten);
+        printf("|%-5s", list[i].class);
+        printf("| %-2d/%-2d/%-5d|\n", list[i].birthday.day, list[i].birthday.month, list[i].birthday.year);
+    }
+}
+//Hàm in ra Phiếu điểm cá nhân của học sinh đã chọn
+void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
+    printf("\n");
+    // Tiêu đề phiếu báo điểm
+    printf("\t\tPHIEU BAO DIEM\n");
+    printf("\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
+
+    // Thông tin cá nhân (in ngày sinh từ student.birthday)
+    printf("Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
+           student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
+    // Header bảng điểm (with table formatting)
+    for(int j=1;j<65;j++){
+        printf("_");
+    }
+    printf("\n");
+    printf("|STT|Mon hoc|");
+    printf("   Diem mini_test(4)  |");
+    printf(" Diem 45p(2)|"); // Thêm tiêu đề cho cột điểm 45 phút
+    printf(" GK | CK | TB |\n");  
+    // In điểm từng môn học và tính điểm trung bình 
+    float tongDiemTB = 0.0; 
+    for (int i = 0; i < 12; i++) {
+        // Tính điểm trung bình môn học bằng hàm Aver
+        diem.diemTrungBinhMonHoc[i] = Aver(student.subject[i].score.test_mini,
+                                           student.subject[i].score.test_45mins,
+                                           student.subject[i].score.mid_term_score,
+                                           student.subject[i].score.end_term_score);
+
+        tongDiemTB += diem.diemTrungBinhMonHoc[i];  // Cộng dồn điểm trung bình
+        // In điểm từng môn học (sửa đổi)
+        printf("|%-3d| %-6s|", i + 1, subjectNameToString(student.subject[i].subject_name));
+        for (int j = 0; j < 4; j++) {
+            printf("%4.1f", student.subject[i].score.test_mini[j]); 
+            if(j!=3) printf(", ");
+            if(j==3) printf("|");
+        }
+        // Thêm phần in điểm 45 phút
+        for (int j = 0; j < 2; j++) {  // Vòng lặp để in 2 điểm 45 phút
+            printf(" %4.1f", student.subject[i].score.test_45mins[j]);
+            if(j!=1) printf(", ");
+            if(j==1) printf("|");
+        }
+        printf("%4.1f|%4.1f|%4.1f|\n", student.subject[i].score.mid_term_score, 
+                                        student.subject[i].score.end_term_score, 
+                                        diem.diemTrungBinhMonHoc[i]);
+    }
+    // Tính TBC (trung bình cộng các điểm TB môn học) bằng hàm S_Aver
+    float TBC = S_Aver(diem.diemTrungBinhMonHoc, 12);
+    // Xác định HL và DH dựa trên TBC (giữ nguyên)
+    char HL[15];
+    char DH[15];
+    if (TBC >= 8.0) {
+        strcpy(HL, "Gioi");
+        strcpy(DH, "HSG");
+    } else if (TBC >= 6.5) {
+        strcpy(HL, "Kha");
+        strcpy(DH, "HSK");
+    } else if (TBC >= 5.0) {
+        strcpy(HL, "Trung binh");
+        strcpy(DH, ""); // Để trống DH
+    } else {
+        strcpy(HL, "Yeu");
+        strcpy(DH, "");
+    }
+    for(int j=1;j<65;j++){
+        printf("~");
+    }
+    printf("\n");
+    printf("\n");
+    // Kết quả học kỳ
+    printf("Tong ket HK I:\nTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
+}
+//Hàm in phiếu điểm thành file .txt
+void InPhieuDiemVaoTep(Student student, Diem diem, int STT ) {
+    char tenTep[50]; // Tạo một mảng để chứa tên tệp
+
+    // Tạo tên tệp dựa trên họ tên và lớp của học sinh (có gạch dưới ngăn cách)
+    sprintf(tenTep, "%s_%s.txt", student.hoten, student.class);
+    // Thay thế khoảng trắng bằng dấu gạch dưới
+    for (char *p = tenTep; *p; p++) {
+        if (*p == ' ') *p = '_';
+    }
+    FILE *f = fopen(tenTep, "w");
+    if (f == NULL) {
+        printf("Khong the mo tep %s de ghi!\n", tenTep);
+        return;
+    }
+    fprintf(f, "\t\tPHIEU BAO DIEM\n");
+    fprintf(f, "\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
+    fprintf(f, "Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
+            student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
+    for (int j = 1; j < 65; j++) {
+        fprintf(f, "_");
+    }
+    fprintf(f, "\n");
+    fprintf(f, "|STT|Mon hoc|   Diem mini_test(4)  | Diem 45p(2)| GK | CK | TB |\n");
+    float tongDiemTB = 0.0;
+    for (int i = 0; i < 12; i++) {
+        diem.diemTrungBinhMonHoc[i] = Aver(student.subject[i].score.test_mini,
+                                          student.subject[i].score.test_45mins,
+                                          student.subject[i].score.mid_term_score,
+                                          student.subject[i].score.end_term_score);
+        tongDiemTB += diem.diemTrungBinhMonHoc[i];
+        fprintf(f, "|%-3d| %-6s|", i + 1, subjectNameToString(student.subject[i].subject_name));
+        for (int j = 0; j < 4; j++) {
+            fprintf(f, "%4.1f", student.subject[i].score.test_mini[j]);
+            if (j != 3) fprintf(f, ", ");
+            if (j == 3) fprintf(f, "|");
+        }
+        for (int j = 0; j < 2; j++) {
+            fprintf(f, " %4.1f", student.subject[i].score.test_45mins[j]);
+            if (j != 1) fprintf(f, ", ");
+            if (j == 1) fprintf(f, "|");
+        }
+        fprintf(f, "%4.1f|%4.1f|%4.1f|\n", student.subject[i].score.mid_term_score,
+                student.subject[i].score.end_term_score, diem.diemTrungBinhMonHoc[i]);
+    }
+    float TBC = S_Aver(diem.diemTrungBinhMonHoc, 12);
+    char HL[15];
+    char DH[15];
+    if (TBC >= 8.0) {
+        strcpy(HL, "Gioi");
+        strcpy(DH, "HSG");
+    } else if (TBC >= 6.5) {
+        strcpy(HL, "Kha");
+        strcpy(DH, "HSK");
+    } else if (TBC >= 5.0) {
+        strcpy(HL, "Trung binh");
+        strcpy(DH, "");
+    } else {
+        strcpy(HL, "Yeu");
+        strcpy(DH, "");
+    }
+
+    for (int j = 1; j < 65; j++) {
+        fprintf(f, "~");
+    }
+    fprintf(f, "\n\n");
+    fprintf(f, "Tong ket HK I:\nTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
+
+    fclose(f);
+    printf("Da in phieu diem vao tep %s\n", tenTep);
+    printf("Nhan Enter de tiep tuc!....\n");
+}
+//Hết chức năng 3.
+//Chức năng 4.
+//Phú Béo
 void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
         printf("\n");
@@ -564,6 +1029,7 @@ void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
         }
         printf("$");
 }
+//Phú Béo
 void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
@@ -615,61 +1081,8 @@ void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
         }
         printf("$");
 }
-void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
-    tinhDiem(Hoc_sinh,numStudents);
-    int indices[MAX_SI_SO];
-    for (int i = 0; i < numStudents; i++) {
-        indices[i] = i;
-    }
 
-    // Sắp xếp mảng chỉ mục theo điểm tổng kết
-    qsort(indices, numStudents, sizeof(int), compareByDiemTongKet);
-        printf("\n");
-        char tieude[]="~~~---DANH SACH HOC SINH---~~~";
-        printf("%70s\n",tieude);
-        int length = 126;
-        for (int i = 0; i < length; i++) {
-        printf("_");
-        }
-        printf("\n");
-        printf("|STT");
-        char name[] = "Ho va Ten";
-        printf("|%-25s", name);
-        char lop[] ="Lop";
-        printf("|%-5s", lop);
-        char gender[] = "Gioi Tinh";
-        printf("|%-6s",gender);
-        char date[] = "Ngay Sinh";
-        printf("|%-13s",date);
-        for (int i = 0; i < 12; i++) {//In ten cac mon hoc
-        printf("|%-4s", subjectNameToString(i)); 
-        }
-        printf("|T.K |\n");
-    for(int i=0;i<para_Si_so_lop;i++){
-        printf("|%-3d",i+1);
-        printf("|%-25s",Hoc_sinh[indices[i]].hoten);// can le tu ben trai sang phai fill 25 ki tu
-                // Ten nguoi thuong ko dai qua 25 ki tu
-        printf("|%-5s",Hoc_sinh[indices[i]].class);
-        printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
-        printf("| %-2d",Hoc_sinh[indices[i]].birthday.day);
-        printf("/%-2d",Hoc_sinh[indices[i]].birthday.month);
-        printf("/%-5d ",Hoc_sinh[indices[i]].birthday.year);
-        for (int j=0; j<12; j++){
-        printf("|%-4.1f", Aver(Hoc_sinh[indices[i]].subject[j].score.test_mini,
-                                Hoc_sinh[indices[i]].subject[j].score.test_45mins,
-                                Hoc_sinh[indices[i]].subject[j].score.mid_term_score,
-                                Hoc_sinh[indices[i]].subject[j].score.end_term_score ));
-                }
-        printf("|%-4.1f", ketQuaHocSinh[indices[i]].diemTongKet);
-        printf("|\n");
-    }
-        printf("$");
-        int length_1 = 124;
-    for (int i = 0; i < length_1; i++) {
-        printf("~");
-        }
-        printf("$");
-}
+//Phú Béo
 void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
@@ -721,330 +1134,14 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         }
         printf("$");
 }
-//Chuc nang 2,
-//Hàm này chuẩn hóa từng từ : liNH => Linh
-char* chuanHoaTu(char *s){
-    s[0] = toupper(s[0]);
-    for(int i = 1; i < (int)strlen(s); i++){
-        s[i] = tolower(s[i]);
-    }
-    return s;
-}
-char *chuanHoaTen(char *s, char *res){
-    char *token = strtok(s, " ");
-    while(token != NULL){
-        //nối từ vào chuỗi kết quả res
-        strcat(res, chuanHoaTu(token));
-        token = strtok(NULL, " ");
-        //Nếu chưa phải từ cuối thì nối thêm dấu cách
-        if(token != NULL){
-            strcat(res, " ");
-        }
-    }
-    return res;
-}
-int searchByLastName(Student* danh_Sach, int numStudents, char* searchName) {
-    char nameCopy[50];
-    
-    for (int i = 0; i < numStudents; i++) {
-        strcpy(nameCopy,danh_Sach[i].hoten);
-        char *firstName, *middleName, *lastName;
-        splitName(nameCopy, &firstName, &middleName, &lastName);
-        if (strcmp(lastName, searchName) == 0) {
-            return i; // Trả về chỉ số của học sinh nếu tìm thấy
-        }
-    }
-    return -1; // Trả về -1 nếu không tìm thấy
-}
-// Tìm kiếm học sinh theo Họ và tên (FullName)
-int searchByFullName(Student* danhSach, int numStudents, char* searchName) {
-    for (int i = 0; i < numStudents; i++) {
-        if (strcmp(danhSach[i].hoten, searchName) == 0) {
-            return i; // Trả về chỉ số của học sinh nếu tìm thấy
-        }
-    }
-    return -1; // Trả về -1 nếu không tìm thấy
-}
-
-void editScoreBySubject_end_term_score(Student *student, Subject_name subject, float newScore) {
-    for (int i = 0; i < 12; i++) {
-        if (student->subject[i].subject_name == subject) {
-            // Tìm thấy môn học cần sửa điểm
-            student->subject[i].score.end_term_score = newScore;
-            
-        }
-    }
-}
-void editScoreBySubject_mid_score(Student *student, Subject_name subject, float newScore) {
-    for (int i = 0; i < 12; i++) {
-        if (student->subject[i].subject_name == subject) {
-            // Tìm thấy môn học cần sửa điểm
-            student->subject[i].score.mid_term_score = newScore;
-         
-        }
-    }
-}
-void editScoreBySubject_mini_test(Student *student, Subject_name subject, float newScore, int a) {
-    for (int i = 0; i < 12; i++) {
-        if (student->subject[i].subject_name == subject) {
-            // Tìm thấy môn học cần sửa điểm
-            student->subject[i].score.test_mini[a] = newScore;
-         
-        }
-    }
-}
-void editScoreBySubject_test_45mins(Student *student, Subject_name subject, float newScore, int a) {
-    for (int i = 0; i < 12; i++) {
-        if (student->subject[i].subject_name == subject) {
-            // Tìm thấy môn học cần sửa điểm
-            student->subject[i].score.test_45mins[a] = newScore;
-         
-        }
-    }
-}
-void in_diem_hien_tai_cua_1HS(int subjectOption,int index){
-    
-    printf("\nDiem mon %s hien tai cua %s la:\n",subjectNameToString(Hoc_sinh[index].subject[subjectOption].subject_name)
-                                                ,Hoc_sinh[index].hoten);
-    printf("Diem mini test(4 diem): ");
-    for (int i = 0; i < 4; i++)
-    {
-        printf("%.1f",Hoc_sinh[index].subject[subjectOption].score.test_mini[i]);
-        if(i<3) printf(" ,");
-    }
-    printf("\nDiem kiem tra 45p (2 diem): ");
-    for (int i = 0; i < 2; i++)
-    {
-        printf("%.1f",Hoc_sinh[index].subject[subjectOption].score.test_45mins[i]);
-        if (i<1)
-        {
-            printf(" ,");
-        }
-    
-    }
-     printf("\n") ; 
-    printf("Diem kiem tra giua ky: %.1f\n",Hoc_sinh[index].subject[subjectOption].score.mid_term_score);
-    printf("Diem kiem tra cuoi ky: %.1f\n",Hoc_sinh[index].subject[subjectOption].score.end_term_score);
-    //in diem mini
-     
-    }
-    
-void chon_mon_va_fix_diem(int index){//Sau khi tim thay 
-    printf("Chon mon hoc can chinh sua diem:\n");
-        for (int i = 0; i < 12; i++) {
-            printf("| %d.%s  ", i + 1, subjectNameToString(Hoc_sinh[index].subject[i].subject_name));
-        }
-    int subjectOption;
-        subjectOption = GetMode("Nhap lua chon[1-12]", "Lua chon",12);
-    in_diem_hien_tai_cua_1HS(subjectOption-1,index);
-    printf("\nChon Diem muon sua:\n");
-    printf("0. Thoat\n");
-    printf("1. Diem mini test\n");
-    printf("2. Diem 45 phut\n");
-    printf("3. Diem giua ki\n");
-    printf("4. Diem cuoi ki\n");
-    int scoreOption;
-    scoreOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
-// Chỉnh sửa điểm của môn học đã chọn
-    float newScore;
-    if (scoreOption==1){
-        printf("\nChon diem mini test muon sua:\n ");
-        for (int i = 0; i < 4; i++){
-            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption-1].score.test_mini[i]);
-        }
-        int miniTestOption;
-        miniTestOption = GetMode("Nhap lua chon[1-4]", "Lua chon",4);
-        printf("\nNhap diem mini test moi: ");
-        scanf("%f", &newScore);
-        printf("\n-------Sua diem thanh cong------\n");
-        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.test_mini[miniTestOption-1],
-                    newScore);
-        editScoreBySubject_mini_test(&Hoc_sinh[index], subjectOption-1, newScore,miniTestOption-1);
-        in_diem_hien_tai_cua_1HS(subjectOption-1,index);
-    }
-    else if (scoreOption==2){
-        printf("\nChon diem 45 phut muon sua:\n ");
-        for (int i = 0; i < 2; i++){
-            printf("|%d. %-3.1f ",i+1,Hoc_sinh[index].subject[subjectOption].score.test_45mins[i]);
-        }
-        int BigTestOption;
-        BigTestOption = GetMode("Nhap lua chon[1-2]", "Lua chon",2);
-        printf("\nNhap diem 45 phut moi: ");
-        scanf("%f", &newScore);
-        printf("\n-------Sua diem thanh cong------\n");
-        printf("Diem mini test da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption].score.test_45mins[BigTestOption-1],
-                    newScore);
-        editScoreBySubject_test_45mins(&Hoc_sinh[index], subjectOption, newScore, BigTestOption-1);
-        in_diem_hien_tai_cua_1HS(subjectOption,index);
-    }
-    else if (scoreOption==3){
-        printf("\nNhap diem giua ki moi: ");
-        scanf("%f", &newScore);
-        printf("\n-------Sua diem thanh cong------\n");
-        printf("Diem giua ki da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.mid_term_score,
-                    newScore);
-
-        editScoreBySubject_mid_score(&Hoc_sinh[index], subjectOption-1, newScore);
-        in_diem_hien_tai_cua_1HS(subjectOption-1,index);
-    }
-    else if (scoreOption == 4) {    
-    printf("\nNhap diem cuoi ki moi: ");
-    scanf("%f", &newScore);
-    printf("\n-------Sua diem thanh cong------\n");
-    printf("\nDiem cuoi ki da duoc sua: %.1f ==> %.1f\n",
-                    Hoc_sinh[index].subject[subjectOption-1].score.end_term_score,
-                    newScore);
-    editScoreBySubject_end_term_score(&Hoc_sinh[index], subjectOption-1, newScore);
-    in_diem_hien_tai_cua_1HS(subjectOption-1,index);
-
-    } 
-    else{
-        printf("Khong co lua chon nay. Vui long nhap lai.\n");
-    }
-}
-void tim_ten_de_sua_diem(Student* list_name, int numStudents){
-    printf("Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD: liNH-> Linh)\n");
-    char search_Last_name[10];
-    printf("Ten can tim: ");
-    fgets(search_Last_name, sizeof(search_Last_name), stdin);
-    search_Last_name[strcspn(search_Last_name, "\n")] = '\0';
-    chuanHoaTu(search_Last_name);
-    //ket thuc phan nhap 
-    int index = searchByLastName(list_name, numStudents, search_Last_name);
-
-    if (index != -1) {
-        printf("\nDa tim thay hoc sinh \"%s !!\"\n",list_name[index].hoten);
-        printf("\n");
-        chon_mon_va_fix_diem(index);
-    } else {
-        printf("Khong tim thay hoc sinh co ho ten %s.\n", search_Last_name);
-    }
-}
-void tim_hoten_de_sua_diem(Student* list_name, int numStudents){
-    printf("Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD:ngUYEN liNH-> Nguyen Linh)\n");
-    char search_name[30];
-    printf("Ten can tim: ");
-    fgets(search_name, sizeof(search_name), stdin);
-    search_name[strcspn(search_name, "\n")] = '\0';
-    char res[100] = "";
-    char *name=chuanHoaTen(search_name,res);
-    int index = searchByFullName(list_name, numStudents, name);
-
-    if (index != -1) {
-        printf("\nDa tim thay hoc sinh \"%s !!\"\n",list_name[index].hoten);
-        printf("\n");
-        chon_mon_va_fix_diem(index);
-    } else {
-        printf("Khong tim thay hoc sinh co ho ten %s.\n", name);
-    }
-}
-// Hàm in ra phiếu điểm cá nhân của học sinh
-void hienThiDanhSachHocSinhCoBan(Student list[], int numStudents) {
-    printf("\n");
-    char tieuDe[] = "~~~---DANH SACH HOC SINH---~~~";
-    printf("%40s\n", tieuDe);
-    printf("|STT");
-    char name[] = "Ho va Ten";
-    printf("|%-25s", name);
-    char lop[] = "Lop";
-    printf("|%-5s", lop);
-
-
-    char date[] = "  Ngay Sinh";
-    printf("|%-12s|\n", date);
-
-    for (int i = 0; i < numStudents; i++) {
-        printf("|%-3d", i + 1);
-        printf("|%-25s", list[i].hoten);
-        printf("|%-5s", list[i].class);
-        printf("| %-2d/%-2d/%-5d|\n", list[i].birthday.day, list[i].birthday.month, list[i].birthday.year);
-    }
-}
-
-void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
-    printf("\n");
-    // Tiêu đề phiếu báo điểm
-    printf("\t\tPHIEU BAO DIEM\n");
-    printf("\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
-
-    // Thông tin cá nhân (in ngày sinh từ student.birthday)
-    printf("Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
-           student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
-    // Header bảng điểm (with table formatting)
-    for(int j=1;j<65;j++){
-        printf("_");
-    }
-    printf("\n");
-    printf("|STT|Mon hoc|");
-    printf("   Diem mini_test(4)  |");
-    printf(" Diem 45p(2)|"); // Thêm tiêu đề cho cột điểm 45 phút
-    printf(" GK | CK | TB |\n");  
-  // In điểm từng môn học và tính điểm trung bình 
-    float tongDiemTB = 0.0; 
-    for (int i = 0; i < 12; i++) {
-        // Tính điểm trung bình môn học bằng hàm Aver
-        diem.diemTrungBinhMonHoc[i] = Aver(student.subject[i].score.test_mini,
-                                           student.subject[i].score.test_45mins,
-                                           student.subject[i].score.mid_term_score,
-                                           student.subject[i].score.end_term_score);
-
-        tongDiemTB += diem.diemTrungBinhMonHoc[i];  // Cộng dồn điểm trung bình
-
-        // In điểm từng môn học (sửa đổi)
-        printf("|%-3d| %-6s|", i + 1, subjectNameToString(student.subject[i].subject_name));
-        for (int j = 0; j < 4; j++) {
-            printf("%4.1f", student.subject[i].score.test_mini[j]); 
-            if(j!=3) printf(", ");
-            if(j==3) printf("|");
-        }
-        // Thêm phần in điểm 45 phút
-        for (int j = 0; j < 2; j++) {  // Vòng lặp để in 2 điểm 45 phút
-            printf(" %4.1f", student.subject[i].score.test_45mins[j]);
-            if(j!=1) printf(", ");
-            if(j==1) printf("|");
-        }
-
-        printf("%4.1f|%4.1f|%4.1f|\n", student.subject[i].score.mid_term_score, 
-                                        student.subject[i].score.end_term_score, 
-                                        diem.diemTrungBinhMonHoc[i]);
-    }
-
-    // Tính TBC (trung bình cộng các điểm TB môn học) bằng hàm S_Aver
-    float TBC = S_Aver(diem.diemTrungBinhMonHoc, 12);
-
-    // Xác định HL và DH dựa trên TBC (giữ nguyên)
-    char HL[15];
-    char DH[15];
-    if (TBC >= 8.0) {
-        strcpy(HL, "Gioi");
-        strcpy(DH, "HSG");
-    } else if (TBC >= 6.5) {
-        strcpy(HL, "Kha");
-        strcpy(DH, "HSK");
-    } else if (TBC >= 5.0) {
-        strcpy(HL, "Trung binh");
-        strcpy(DH, ""); // Để trống DH
-    } else {
-        strcpy(HL, "Yeu");
-        strcpy(DH, "");
-    }
-    for(int j=1;j<65;j++){
-        printf("~");
-    }
-    printf("\n");
-    printf("\n");
-    // Kết quả học kỳ
-    printf("Tong ket HK I:\nTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
-}
+//Hết chức năng 4
+//Chức năng 5.
+//Hàm thêm học sinh mới (chỉ 1 học sinh)
 void ThemHocSinh() {
     if (numStudents >= MAX_SI_SO) {
         printf("Danh sach hoc sinh da day!\n");
         return;
     }
-    
     printf("\nNHAP THONG TIN HOC SINH MOI:\n");
     printf("Ho va ten: ");
     char name[30];
@@ -1055,16 +1152,13 @@ void ThemHocSinh() {
     printf("Lop: ");
     scanf("%s", Hoc_sinh[numStudents].class);
     while (getchar() != '\n'); // Xóa bộ đệm sau khi nhập lớp
-
     printf("Gioi tinh (1: Nam, 2: Nu): ");
     scanf("%d", &(Hoc_sinh[numStudents].gender));
     while (getchar() != '\n'); // Xóa bộ đệm sau khi nhập giới tính
-
     printf("Ngay sinh (dd mm yyyy): ");
     scanf("%d %d %d", &Hoc_sinh[numStudents].birthday.day, 
           &Hoc_sinh[numStudents].birthday.month, &Hoc_sinh[numStudents].birthday.year);
     while (getchar() != '\n'); // Xóa bộ đệm sau khi nhập ngày sinh
-
     // Khởi tạo điểm mặc định là 0
     for (int i = 0; i < 12; i++) {
         Hoc_sinh[numStudents].subject[i].subject_name = i;
@@ -1076,24 +1170,20 @@ void ThemHocSinh() {
         }
         Hoc_sinh[numStudents].subject[i].score.mid_term_score = 0;
         Hoc_sinh[numStudents].subject[i].score.end_term_score = 0;
-    }
-    
+    }  
     // Hỏi xem có muốn nhập điểm không
     printf("Ban co muon nhap diem cho hoc sinh nay khong? (y/n): ");
     char nhapDiem;
     scanf("%c", &nhapDiem);
     while (getchar() != '\n'); // Xóa bộ đệm
-
     if (tolower(nhapDiem) == 'y') { // Chuyển về chữ thường để so sánh
         while (1) {
             printf("Chon mon hoc de nhap diem (0 de thoat):\n");
             for (int i = 0; i < 12; i++) {
                 printf("%d. %s\n", i + 1, subjectNameToString(i));
             }
-
             int monHoc=GetMode("Lua chon Mon Hoc muon nhap diem: ","Mon hoc ban chon la: ",12);
             while (getchar() != '\n'); // Xóa bộ đệm
-
             if (monHoc == 0) {
                 break;
             } else if (monHoc >= 1 && monHoc <= 12) {
@@ -1118,6 +1208,9 @@ void ThemHocSinh() {
     numStudents++;
     printf("Da them hoc sinh moi thanh cong!\n");
 }
+//Hết chức năng 5.
+//chức năng 6.
+//Hàm ghi thông tin cơ bản của tất cả học sinh vào file
 void GhiDuLieuCoBan(const char *tenTep) {
     FILE *f = fopen(tenTep, "w");
     if (f == NULL) {
@@ -1131,10 +1224,10 @@ void GhiDuLieuCoBan(const char *tenTep) {
                 (Hoc_sinh[i].gender == Male) ? "Nam" : "Nu",
                 Hoc_sinh[i].birthday.day, Hoc_sinh[i].birthday.month, Hoc_sinh[i].birthday.year);
     }
-    
     printf("Da ghi thong tin co ban cua hoc sinh vao tep %s\n", tenTep);
     fclose(f);
 }
+//Hàm ghi Điểm TB các môn và điểm TK của tất cả học sinh vào file
 void GhiDiem_TB(const char *tenTep) {
     FILE *f = fopen(tenTep, "w");
     if (f == NULL) {
@@ -1159,94 +1252,15 @@ void GhiDiem_TB(const char *tenTep) {
         }
         fprintf(f, "%.1f\n", ketQuaHocSinh[i].diemTongKet); 
     }
-    
     printf("Da ghi diem TB cac mon cua hoc sinh vao tep %s\n", tenTep);
     fclose(f);
 }
-void InPhieuDiemVaoTep(Student student, Diem diem, int STT ) {
-    char tenTep[50]; // Tạo một mảng để chứa tên tệp
-
-    // Tạo tên tệp dựa trên họ tên và lớp của học sinh (có gạch dưới ngăn cách)
-    sprintf(tenTep, "%s_%s.txt", student.hoten, student.class);
-    // Thay thế khoảng trắng bằng dấu gạch dưới
-    for (char *p = tenTep; *p; p++) {
-        if (*p == ' ') *p = '_';
-    }
-    FILE *f = fopen(tenTep, "w");
-    if (f == NULL) {
-        printf("Khong the mo tep %s de ghi!\n", tenTep);
-        return;
-    }
-
-    fprintf(f, "\t\tPHIEU BAO DIEM\n");
-    fprintf(f, "\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
-
-    fprintf(f, "Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
-            student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
-
-    for (int j = 1; j < 65; j++) {
-        fprintf(f, "_");
-    }
-    fprintf(f, "\n");
-    fprintf(f, "|STT|Mon hoc|   Diem mini_test(4)  | Diem 45p(2)| GK | CK | TB |\n");
-
-    float tongDiemTB = 0.0;
-    for (int i = 0; i < 12; i++) {
-        diem.diemTrungBinhMonHoc[i] = Aver(student.subject[i].score.test_mini,
-                                          student.subject[i].score.test_45mins,
-                                          student.subject[i].score.mid_term_score,
-                                          student.subject[i].score.end_term_score);
-        tongDiemTB += diem.diemTrungBinhMonHoc[i];
-
-        fprintf(f, "|%-3d| %-6s|", i + 1, subjectNameToString(student.subject[i].subject_name));
-        for (int j = 0; j < 4; j++) {
-            fprintf(f, "%4.1f", student.subject[i].score.test_mini[j]);
-            if (j != 3) fprintf(f, ", ");
-            if (j == 3) fprintf(f, "|");
-        }
-        for (int j = 0; j < 2; j++) {
-            fprintf(f, " %4.1f", student.subject[i].score.test_45mins[j]);
-            if (j != 1) fprintf(f, ", ");
-            if (j == 1) fprintf(f, "|");
-        }
-        fprintf(f, "%4.1f|%4.1f|%4.1f|\n", student.subject[i].score.mid_term_score,
-                student.subject[i].score.end_term_score, diem.diemTrungBinhMonHoc[i]);
-    }
-
-    float TBC = S_Aver(diem.diemTrungBinhMonHoc, 12);
-
-    char HL[15];
-    char DH[15];
-    if (TBC >= 8.0) {
-        strcpy(HL, "Gioi");
-        strcpy(DH, "HSG");
-    } else if (TBC >= 6.5) {
-        strcpy(HL, "Kha");
-        strcpy(DH, "HSK");
-    } else if (TBC >= 5.0) {
-        strcpy(HL, "Trung binh");
-        strcpy(DH, "");
-    } else {
-        strcpy(HL, "Yeu");
-        strcpy(DH, "");
-    }
-
-    for (int j = 1; j < 65; j++) {
-        fprintf(f, "~");
-    }
-    fprintf(f, "\n\n");
-    fprintf(f, "Tong ket HK I:\nTBC: %.1f\tHoc luc: %s\tHanh kiem: Tot\n", TBC, HL);
-
-    fclose(f);
-    printf("Da in phieu diem vao tep %s\n", tenTep);
-    printf("Nhan Enter de tiep tuc!....\n");
-}
-
+//Hết Chức năng 6.
 int main(){
     Login();
     Tao_data_lop_6A1();      
     while(1){
-    system("cls");// xoa moi thu tren man hinh
+    system(CLEAR_SCREEN);// xoa moi thu tren man hinh
     Main_Menu_Display();// goi ra main menu  
     int option=GetMode("Select mode [0-6]", "Mode selected",6) ; 
      int backToMainMenu = 0;
@@ -1256,15 +1270,13 @@ int main(){
             Menu_1_Display();
                 int sub_Option = GetMode("Select mode [0-3]", "Mode selected",3);                              
                 if (sub_Option == 1) {
-                    system("cls");
-                    // 1. Theo lop    
-                    // Hien tai chi co 1 lop              
+                    system(CLEAR_SCREEN);              
                     Hien_thi_ds_Hoc_sinh_DiemTB_mon(numStudents);
                 } else if (sub_Option == 2) {
-                    // 2. Theo Ten
-                    system("cls");                   
+                    system(CLEAR_SCREEN);                   
                     Hien_thi_ds_Hoc_sinh_anpha(numStudents);
-                } else if(sub_Option==3){               
+                } else if(sub_Option==3){
+                    system(CLEAR_SCREEN);               
                     Hien_thi_ds_Hoc_sinh_theo_DTK(numStudents);
                 } else if (sub_Option == 0) {
                     backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
@@ -1295,19 +1307,17 @@ int main(){
                         break; // Thoát khỏi vòng lặp menu chính
                         }
             }
-    }
+    }// Hết op 2
     else if(option==3){
          while (1) {
-                system("cls");
+                system(CLEAR_SCREEN);
                 printf("\n-----HIEN THI DANH SACH HOC SINH----\n");
                 hienThiDanhSachHocSinhCoBan(Hoc_sinh, numStudents); 
-
                 // Nhập STT học sinh để xem điểm chi tiết
                 printf("\nNhap STT hoc sinh de xem diem chi tiet (0 de quay lai): ");
                 int studentIndex;
                 scanf("%d", &studentIndex);
                 while (getchar() != '\n'); // clear input buffer
-
                 if (studentIndex == 0) {
                     break; // Quay lại menu chính
                 } else if (studentIndex >= 1 && studentIndex <= numStudents) {
@@ -1316,21 +1326,18 @@ int main(){
                     char inRaTep;
                     scanf("%c", &inRaTep);
                     while (getchar() != '\n'); // clear input buffer
-
                     if (tolower(inRaTep) == 'y') {
                     
                     InPhieuDiemVaoTep(Hoc_sinh[studentIndex - 1], 
                     ketQuaHocSinh[studentIndex - 1], studentIndex);
                     }
                     getchar();
-                    printf("\nNhan Enter de tiep tuc...");
-                    
+                    printf("\nNhan Enter de tiep tuc...");   
                 } else {
                     printf("STT khong hop le!\n");
-                }
-            
+                }            
         } 
-    }
+    }//Hết Op 3
     else if(option==4){
         //Hiển thị danh sách điểm theo từng môn học
         while (!backToMainMenu) { // Vòng lặp menu con
@@ -1345,15 +1352,15 @@ int main(){
             Menu_4_Display();
             int sub_Option = GetMode("Nhap lua chon[0-4]", "Lua chon",4);
             if (sub_Option == 1) {
-                system("cls");
+                system(CLEAR_SCREEN);
                 Hien_thi_ds_Diem_mon(numStudents, subjectOption-1);
             }
             else if (sub_Option == 2) {
-                system("cls");
+                system(CLEAR_SCREEN);
                  Hien_thi_ds_Diem_mon_alpha(numStudents, subjectOption-1);
             }
             else if (sub_Option == 3) {
-                system("cls");
+                system(CLEAR_SCREEN);
                 Hien_thi_ds_Diem_mon_trung_binh(numStudents, subjectOption-1);
             }
             else if (sub_Option ==0) {
@@ -1371,19 +1378,22 @@ int main(){
                 break; // Thoát khởi vòng lặp menu chính
                 }       
     }
-    }else if (option == 5) {
+    }//Hết op 4
+    else if (option == 5) {// Lưu ý cho người dùng
     printf("Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD: liNH-> Linh)\n");
     printf("+ Khi khong nhap diem hoc sinh, diem mac dinh se la 0");
     ThemHocSinh();
-    }else if (option == 6) {
+    }//Hết op 5
+    else if (option == 6) {
     GhiDuLieuCoBan("du_lieu_co_ban.txt");
     GhiDiem_TB("diem_hoc_sinh.txt");
     printf("Nhan Enter de tiep tuc!!");
     getchar();
-    }else if(option==0){// Exiting the program
+    }//Hết op 6
+    else if(option==0){// Exiting the program
         printf("\nExit program!");
         getchar();
         exit(0);
     } 
-   }
+   }//Hết vòng While
 }

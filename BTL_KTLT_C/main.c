@@ -7,18 +7,15 @@
 #else // Nếu là macOS, Linux, etc.
     #define CLEAR_SCREEN "clear"
 #endif
-#define MAX_SI_SO 100
-enum Gender {
-    Male=1,
-    Female
-};
+#define MAX_SI_SO 50
+
 typedef enum Gender Gender;
  struct Date { 
     int day;
     int month;
     int year;
 };
-typedef struct Date Date; 
+typedef struct Date Date;
 
 struct Score {
     float test_mini[4];
@@ -29,52 +26,10 @@ struct Score {
 typedef struct Score Score;
 
 enum Subject_name {
-    Maths=0,
-    Physics,
-    Chemistry,
-    Biology,
-    Informatics,
-    Literatures,
-    History,
-    Geography,
-    Language,
-    Moral_Education,
-    Technical,
-    PE
+    Maths=0,Physics,Chemistry,Biology,Informatics,Literatures,History,
+    Geography,Language,Moral_Education,Technical,PE
 };
 typedef enum Subject_name Subject_name;
-
-struct Subject {
-    Subject_name subject_name;
-    Score score;   
-};
-typedef struct Subject Subject;
- 
- struct Student {
-    char hoten[30];
-    char class[10];
-    Gender gender;
-    Date birthday;
-    Subject subject[12];
-};
-typedef struct Student Student;
-
-struct Semester {
-    int semester_code;
-    Date date;
-    Student student;
-};
-typedef struct Semester Semester;
-
-struct Diem {
-    float diemTongKet;
-    float diemTrungBinhMonHoc[12];
-};
-typedef struct Diem Diem;
-// Mảng chứa điểm của tất cả học sinh
-Student Hoc_sinh[MAX_SI_SO];
-// Mảng chứa các điểm tổng kết, trung bình môn
-Diem ketQuaHocSinh[MAX_SI_SO]; 
 // Chuyển đổi Subject_name thành chuỗi
 const char* subjectNameToString(Subject_name subject) {
     switch (subject) { 
@@ -93,7 +48,37 @@ const char* subjectNameToString(Subject_name subject) {
         default:             return "Unknown";
     }
 }
-//hàm tính điểm truung bình minitest và test 45
+struct Subject {
+    Subject_name subject_name;
+    Score score;   
+};
+typedef struct Subject Subject;
+
+enum Gender {
+    Male=1,
+    Female
+};
+typedef enum Gender Gender;
+
+struct Student {
+    char hoten[30];
+    char class[10];
+    Gender gender;
+    Date birthday;
+    Subject subject[12];
+};
+typedef struct Student Student;
+
+struct Diem {
+    float diemTongKet;
+    float diemTrungBinhMonHoc[12];
+};
+typedef struct Diem Diem;
+//Mảng chứa học sinh của 1 lớp
+Student Hoc_sinh[MAX_SI_SO];
+//Mảng chứa điểm TB môn và tổng kết của học sinh
+Diem ketQuaHocSinh[MAX_SI_SO]; 
+//hàm tính điểm trung bình minitest và test 45
 float S_Aver(float Arr[],int n){
     float sum=0;
     for(int i=0;i<n;i++){
@@ -107,50 +92,22 @@ float Aver(float mini[4],float test45[2], float mid, float end){
     sum+=S_Aver(mini,4);// minitest hệ số 1
     sum+=S_Aver(test45,2)*2;// test 45 hệ số 2
     sum+=mid*2; //midterm test hệ số 2
-    sum+=end*3;// finalterm test hệ số 3
+    sum+=end*3;// endterm test hệ số 3
     return sum/8;
 }
-//Hàm so sánh điểm tổng kết
-int compareByDiemTongKet(const void* a, const void* b) {
-    int indexA = *(int*)a;
-    int indexB = *(int*)b;
-
-    float diemTongKetA = ketQuaHocSinh[indexA].diemTongKet;
-    float diemTongKetB = ketQuaHocSinh[indexB].diemTongKet;
-    // Sắp xếp giảm dần
-    if (diemTongKetA < diemTongKetB) {
-        return 1; 
-    } else if (diemTongKetA > diemTongKetB) {
-        return -1;
-    } else {
-        return 0;
-    }
-}
-// hàm Login tài khoản để dùng hệ thống
-void Login(){
-    char a[20] = "A+KTLT";
-    char b[20] = "A+KTLT";
-    printf("\n\t!Dang nhap tai khoan!\n");
-    while(1){
-        printf("Tai khoan:");
-        char tk[20];
-        scanf("%s", tk);
-        if(strcmp(a, tk)!= 0){
-            printf("-(X)-!!Tai khoan nhap sai, vui long nhap lai!!\n");
-            continue;
+//Tính điểm tổng kết và trung bình môn của toàn bộ học sinh
+void tinhDiem(Student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
+        ketQuaHocSinh[i].diemTongKet = 0;
+        for (int j = 0; j < 12; j++) {
+            ketQuaHocSinh[i].diemTrungBinhMonHoc[j]=Aver(students[i].subject[j].score.test_mini,
+                                                    students[i].subject[j].score.test_45mins,
+                                                    students[i].subject[j].score.mid_term_score,
+                                                    students[i].subject[j].score.end_term_score);
+            ketQuaHocSinh[i].diemTongKet+=ketQuaHocSinh[i].diemTrungBinhMonHoc[j];
+            
         }
-        else{
-            printf("Mat khau:");
-            char mk[20];
-            scanf("%s", mk);
-            if(strcmp(mk, b)!= 0){
-                printf("-(X)-!!Sai mat khau, vui long nhap lai!!\n");
-                continue;
-            }
-            else{
-                break;
-            }
-        }
+        ketQuaHocSinh[i].diemTongKet/=12;
     }
 }
 // hàm nhập lựa chọn
@@ -163,7 +120,6 @@ int GetMode(char* input_prompt, char* confirm_message, int max_op) {
         printf("\n%s: %d\n",confirm_message, option);
      // Xác nhận lại lụa chọn của người dùng
     } while(!(option >= 0 && option <= max_op)); // Lặp lại đến khi đúng 
-
     return  option;
 }
 //Hàm Hiển thị Main Menu
@@ -186,7 +142,7 @@ void Main_Menu_Display(){
 void Menu_1_Display(){
     printf("Chon chuc nang hien thi: \n");
     printf("0. Quay lai Main Menu\n");
-    printf("1. Theo Lop \n");
+    printf("1. Theo danh sach mac dinh \n");
     printf("2. Theo ten alphabet\n");
     printf("3. Theo diem tong ket\n");
 
@@ -207,13 +163,12 @@ void Menu_2_1_Display(){
 void Menu_4_Display(){
     printf("Chon chuc nang hien thi: \n");
     printf("0. Quay lai Main Menu\n");
-    printf("1. Theo Lop \n");
+    printf("1. Theo danh sach mac dinh \n");
     printf("2. Theo ten alphabet\n");
     printf("3. Theo diem trung binh\n");
 }
-int numStudents;
-void Tao_data_lop_6A1(){// Hàm tạo sẵn các dữ liệu của học sinh 
-  
+int numStudents;//Khai báo sĩ số của lớp
+void Tao_data_lop_6A1(){
      Hoc_sinh[0]=(Student){
         .hoten = "Nguyen Van An",
         .class = "6A1",
@@ -234,145 +189,237 @@ void Tao_data_lop_6A1(){// Hàm tạo sẵn các dữ liệu của học sinh
             { .subject_name = PE, .score = { {9.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 5.9, 8.7 } },
         }
     };
-    Hoc_sinh[1]=(Student){
-        .hoten = "Tran Thi Bao",
-        .class = "6A1",
-        .gender = Female,
-        .birthday = { .day = 15, .month = 4, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.0, 6.5, 6.0, 7.5}, {8.5, 4.0}, 8.8, 8.5 } },
-            { .subject_name = Physics, .score = { {7.5, 7.0, 9.5, 7.7}, {7.0, 8.0}, 9.0, 8.7 } },
-            { .subject_name = Chemistry, .score = { {7.5, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
-            { .subject_name = Biology, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 8.0, 8.7 } },
-            { .subject_name = Informatics, .score = { {7.5, 7.0, 3.5, 7.7}, {7.3, 3.4}, 7.9, 8.7 } },
-            { .subject_name = Literatures, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 9.9, 8.7 } },
-            { .subject_name = History, .score = { {7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 5.9, 4.7 } },
-            { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } },
-            { .subject_name = Language, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
-            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 7.7 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.3, 5.7 } },
-            { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 2.9, 0.7 } },
-            
-        }
-    };
-    Hoc_sinh[2]=(Student){
-        .hoten = "Le Van Canh",
-        .class = "6A1",
-        .gender = Male,
-        .birthday = { .day = 10, .month = 8, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.0, 1.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
-            { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
-            { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
-            { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
-            { .subject_name = Informatics, .score = { {7.5, 7.0, 1.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Literatures, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.7 } },
-            { .subject_name = History, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
-            { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } },
-            { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.5 } },
-            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.5 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
-            { .subject_name = PE, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } },
-        }
-    };
+        Hoc_sinh[1]=(Student){
+            .hoten = "Tran Thi Bao",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 15, .month = 4, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = { {8.0, 6.5, 6.0, 7.5}, {8.5, 4.0}, 8.8, 8.5 } },
+                { .subject_name = Physics, .score = { {7.5, 7.0, 9.5, 7.7}, {7.0, 8.0}, 9.0, 8.7 } },
+                { .subject_name = Chemistry, .score = { {7.5, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
+                { .subject_name = Biology, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 8.0, 8.7 } },
+                { .subject_name = Informatics, .score = { {7.5, 7.0, 3.5, 7.7}, {7.3, 3.4}, 7.9, 8.7 } },
+                { .subject_name = Literatures, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 9.9, 8.7 } },
+                { .subject_name = History, .score = { {7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 5.9, 4.7 } },
+                { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } },
+                { .subject_name = Language, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
+                { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 7.7 } },
+                { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.3, 5.7 } },
+                { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 2.9, 0.7 } },              
+            }
+        };
+        Hoc_sinh[2]=(Student){
+            .hoten = "Le Van Canh",
+            .class = "6A1",
+            .gender = Male,
+            .birthday = { .day = 10, .month = 8, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = { {8.0, 1.5, 7.0, 7.5}, {7.5, 8.0}, 7.8, 8.5 } },
+                { .subject_name = Physics, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
+                { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
+                { .subject_name = Biology, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
+                { .subject_name = Informatics, .score = { {7.5, 7.0, 1.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Literatures, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.7 } },
+                { .subject_name = History, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
+                { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } },
+                { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.5 } },
+                { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.5 } },
+                { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
+                { .subject_name = PE, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } },
+            }
+        };
+        Hoc_sinh[3]=(Student){
+            .hoten = "Pham Thi Dao",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 25, .month = 12, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = { {8.0, 8.5, 7.0, 8.0}, {1.5, 8.0}, 7.8, 8.5 } },
+                { .subject_name = Physics, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } },
+                { .subject_name = Chemistry, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.6 } },
+                { .subject_name = Biology, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 6.6 } },
+                { .subject_name = Informatics, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.6 } },
+                { .subject_name = Literatures, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.6 } },
+                { .subject_name = History, .score = { {7.5, 5.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.6 } },
+                { .subject_name = Geography, .score = { {1.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.6 } },
+                { .subject_name = Language, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Moral_Education, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.9} },
+                { .subject_name = Technical, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } },
+                { .subject_name = PE, .score = { {6.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            }
+        };
+        Hoc_sinh[4]=(Student){
+            .hoten = "Nguyen Thi Emass",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 20, .month = 5, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = { {8.0,9.5, 7.0, 9.5}, {7.5, 8.0}, 7.8, 8.5 } },
+                { .subject_name = Physics, .score = { {6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Chemistry, .score = { {7.5, 7.0, 9.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Biology, .score = { {3.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Informatics, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Literatures, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = History, .score = { {6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Language, .score = { {7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Moral_Education, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
+                { .subject_name = Technical, .score = { {7.5, 7.0, 9.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = PE, .score = { {10.0, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            }
+        };
+        Hoc_sinh[5]=(Student){
+            .hoten = "Nguyen Van Anh",
+            .class = "6A1",
+            .gender = Male,
+            .birthday = { .day = 20, .month = 5, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = { {8.0, 10.0, 7.0, 2.0}, {4.8, 8.0}, 7.8, 4.5 } },
+                { .subject_name = Physics, .score = { {6.8, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Biology, .score = { {7.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Informatics, .score = { {4.6, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Literatures, .score = { {3.4, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = History, .score = { {7.5, 7.0, 5.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Language, .score = { {7.5, 7.0, 7.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
+                { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+                { .subject_name = PE, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+            }
+        };
+        Hoc_sinh[6]=(Student){
+            .hoten = "Le Khanh Duy",
+            .class = "6A1",
+            .gender = Male,
+            .birthday = { .day = 12, .month = 7, .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = {{8.5, 6, 8.5, 7}, {7.5, 8.0}, 7.8, 8.5}},
+                { .subject_name = Physics, .score = {{9.0, 6.0, 7.5, 7.5}, {7.0, 7.5}, 9.0, 6.0}},
+                { .subject_name = Chemistry, .score = {{8.0, 7.0, 7.0, 7.5}, {6.0, 6.5}, 8.0, 8.5}},
+                { .subject_name = Biology, .score ={{8.0, 8.0, 6.5, 6.5}, {7.3, 8.0}, 7.9, 8.7}},
+                { .subject_name = Informatics, .score ={{8.0, 7.0, 7.0, 7.5}, {9.0, 8.5}, 7.5, 6.0}},
+                { .subject_name = Literatures, .score ={{8.5, 6.0, 8.5, 8.5}, {6.0, 6.5}, 7.0, 8.5}},
+                { .subject_name = History, .score ={{6.0, 7.5, 9.0, 6.0}, {9.0, 7.5}, 7.9, 8.7}},
+                { .subject_name = Geography, .score ={{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7}},
+                { .subject_name = Language, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
+                { .subject_name = Moral_Education, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 10.0, 5.5}},
+                { .subject_name = Technical, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
+                { .subject_name = PE, .score ={{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}},
+            }
+        };Hoc_sinh[7]=(Student){
+            .hoten = "Nguyen Thi Huong",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 5, .month = 3 , .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = {{6.5, 6.0, 8.0, 7.0}, {6.0, 8.5}, 6.5, 8.5}},
+                { .subject_name = Physics, .score = {{8.5, 6.0, 9.5, 8.5}, {6.0, 7.5}, 8.0, 8.5}},
+                { .subject_name = Chemistry, .score = {{8.0, 9.5, 8.0, 9.5}, {9.0, 9.5}, 9.0, 9.5}},
+                { .subject_name = Biology, .score ={{8.0, 8.0, 8.5, 9.0}, {9.0, 9.5}, 9.5, 9.5}},
+                { .subject_name = Informatics, .score ={{6.0, 8.5, 7.0, 7.5}, {7.5, 7.5}, 7.5, 7.5}},
+                { .subject_name = Literatures, .score ={{6.5, 6.0, 6.5, 7.5}, {9.0, 8.0}, 9.0, 8.5}},
+                { .subject_name = History, .score ={{8.5, 6.5, 6.5, 6.0}, {8.0, 7.0}, 7.5, 6.0}},
+                { .subject_name = Geography, .score ={{6.5, 9.0, 8.0, 6.0}, {6.0, 8.5}, 7.5, 6.0}},
+                { .subject_name = Language, .score ={{6.0, 9.0, 8.0, 9.0}, {6.5, 6.5}, 7.0, 9.5}},
+                { .subject_name = Moral_Education, .score ={{9.5, 8.0, 7.5, 7.5}, {7.5, 6.5}, 6.0, 8.5}},
+                { .subject_name = Technical, .score ={{9.5, 7.0, 8.5, 7.5}, {6.5, 8.0}, 7.5, 7.0}},
+                { .subject_name = PE, .score ={{7.0, 6.5, 9.0, 7.0}, {9.0, 6.5}, 7.5, 9.0}},
+            }
+        };Hoc_sinh[8]=(Student){
+            .hoten = "Le Thi Mai",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 18, .month = 9 , .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = {{6.0, 7.0, 8.0, 9.0}, {7.0, 6.0}, 9.0, 7.0}},
+                { .subject_name = Physics, .score = {{9.5, 7.5, 9.0, 8.5}, {6.0, 9.0}, 7.0, 7.5}},
+                { .subject_name = Chemistry, .score = {{7.5, 9.0, 6.0, 9.0}, {9.5, 9.5}, 8.0, 9.5}},
+                { .subject_name = Biology, .score ={{8.5, 7.0, 8.0, 6.0}, {8.5, 9.5}, 9.5, 8.5}},
+                { .subject_name = Informatics, .score ={{6.5, 7.5, 7.5, 8.0}, {7.0, 8.0}, 7.5, 9.0}},
+                { .subject_name = Literatures, .score ={{8.5, 8.0, 6.0, 8.5}, {7.0, 7.5}, 9.0, 6.0}},
+                { .subject_name = History, .score ={{6.5, 6.0, 6.5, 8.0}, {9.5, 6.0}, 7.5, 6.0}},
+                { .subject_name = Geography, .score ={{8.5, 6.0, 9.5, 7.5}, {6.0, 9.5}, 6.5, 6.0}},
+                { .subject_name = Language, .score ={{7.0, 8.0, 8.5, 9.0}, {7.5, 9.0}, 7.0, 7.5}},
+                { .subject_name = Moral_Education, .score ={{9.5, 7.0, 6.0, 7.0}, {9.0, 6.0}, 6.0, 9.5}},
+                { .subject_name = Technical, .score ={{6.5, 8.0, 6.0, 6.0}, {6.5, 8.0}, 7.5, 6.5}},
+                { .subject_name = PE, .score ={{7.5, 6.5, 8.0, 6.5}, {7.0, 8.5}, 7.5, 8.0}},
+            }
+        };Hoc_sinh[9]=(Student){
+            .hoten = "Pham Ngoc Linh",
+            .class = "6A1",
+            .gender = Female,
+            .birthday = { .day = 9, .month = 4 , .year = 2013 },
+            .subject = {
+                { .subject_name = Maths, .score = {{9.0, 7.5, 8.0, 8.0}, {8.5, 9.5}, 9.5, 8.5}},
+                { .subject_name = Physics, .score = {{8.5, 7.0, 9.0, 6.5}, {7.5, 9.5}, 8.0, 8.5}},
+                { .subject_name = Chemistry, .score = {{6.5, 7.0, 6.5, 7.0}, {6.5, 7.5}, 7.5, 9.5}},
+                { .subject_name = Biology, .score ={{8.5, 6.0, 6.0, 6.5}, {8.5, 9.0}, 9.5, 7.5}},
+                { .subject_name = Informatics, .score ={{6.5, 7.5, 9.5, 9.0}, {7.0, 9.0}, 7.5, 8.0}},
+                { .subject_name = Literatures, .score ={{7.5, 8.0, 7.0, 7.5}, {7.0, 9.0}, 9.5, 7.0}},
+                { .subject_name = History, .score ={{6.5, 6.5, 7.5, 8.0}, {8.5, 7.5}, 8.5, 9.0}},
+                { .subject_name = Geography, .score ={{9.5, 6.0, 8.5, 8.5}, {8.5, 8.5}, 6.5, 9.5}},
+                { .subject_name = Language, .score ={{6.0, 6.0, 8.5, 7.5}, {9.5, 6.5}, 7.0, 9.5}},
+                { .subject_name = Moral_Education, .score ={{8.5, 7.0, 8.5, 8.5}, {7.0, 8.5}, 6.0, 7.5}},
+                { .subject_name = Technical, .score ={{7.5, 8.0, 9.0, 9.0}, {9.5, 8.0}, 6.5, 6.0}},
+                { .subject_name = PE, .score ={{8.0, 9.0, 8.5, 6.5}, {7.5, 9.0}, 6.0, 8.0}},
+            }
+        };
+    numStudents=10;
+}
 
-    Hoc_sinh[3]=(Student){
-        .hoten = "Pham Thi Dao",
-        .class = "6A1",
-        .gender = Female,
-        .birthday = { .day = 25, .month = 12, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.0, 8.5, 7.0, 8.0}, {1.5, 8.0}, 7.8, 8.5 } },
-            { .subject_name = Physics, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } },
-            { .subject_name = Chemistry, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.6 } },
-            { .subject_name = Biology, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 6.6 } },
-            { .subject_name = Informatics, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.6 } },
-            { .subject_name = Literatures, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.6 } },
-            { .subject_name = History, .score = { {7.5, 5.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 9.6 } },
-            { .subject_name = Geography, .score = { {1.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.6 } },
-            { .subject_name = Language, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Moral_Education, .score = { {8.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.9} },
-            { .subject_name = Technical, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 10.0 } },
-            { .subject_name = PE, .score = { {6.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+// Chức năng 1.
+// Hàm  cho chức năng 1.1
+void Hien_thi_ds_Hoc_sinh_mac_dinh(int para_Si_so_lop ){
+    // Hiện thị mặc định theo thứ tự của mảng có sẵn
+        tinhDiem(Hoc_sinh,numStudents);
+        printf("\n");
+        char tieude[]="~~~---DANH SACH HOC SINH---~~~";
+        printf("%70s\n",tieude);
+        int length = 126;
+        for (int i = 0; i < length; i++) {
+        printf("_");
         }
-    };
-    Hoc_sinh[4]=(Student){
-        .hoten = "Nguyen Thi Emass",
-        .class = "6A1",
-        .gender = Female,
-        .birthday = { .day = 20, .month = 5, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.0,9.5, 7.0, 9.5}, {7.5, 8.0}, 7.8, 8.5 } },
-            { .subject_name = Physics, .score = { {6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Chemistry, .score = { {7.5, 7.0, 9.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Biology, .score = { {3.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Informatics, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Literatures, .score = { {5.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = History, .score = { {6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Language, .score = { {7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Moral_Education, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 9.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = PE, .score = { {10.0, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
+        printf("\n");
+        printf("|STT");
+        char name[] = "Ho va Ten";
+        printf("|%-25s", name);
+        char lop[] ="Lop";
+        printf("|%-5s", lop);
+        char gender[] = "Gioi Tinh";
+        printf("|%-6s",gender);
+        char date[] = "Ngay Sinh";
+        printf("|%-13s",date);
+        for (int i = 0; i < 12; i++) {//In ten cac mon hoc
+        printf("|%-4s", subjectNameToString(i)); 
         }
-    };
-    Hoc_sinh[5]=(Student){
-        .hoten = "Nguyen Van Anh",
-        .class = "6A1",
-        .gender = Male,
-        .birthday = { .day = 20, .month = 5, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = { {8.0, 10.0, 7.0, 2.0}, {4.8, 8.0}, 7.8, 4.5 } },
-            { .subject_name = Physics, .score = { {6.8, 7.0, 4.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Chemistry, .score = { {7.5, 7.0, 8.5, 2.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Biology, .score = { {7.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Informatics, .score = { {4.6, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Literatures, .score = { {3.4, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = History, .score = { {7.5, 7.0, 5.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Language, .score = { {7.5, 7.0, 7.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
-            { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-            { .subject_name = PE, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-        }
-    };
-    Hoc_sinh[6]=(Student){
-        .hoten = "Le Khanh Duy",
-        .class = "6A1",
-        .gender = Male,
-        .birthday = { .day = 12, .month = 7, .year = 2013 },
-        .subject = {
-            { .subject_name = Maths, .score = {{8.5, 6, 8.5, 7}, {7.5, 8.0}, 7.8, 8.5}},
-            { .subject_name = Physics, .score = {{9.0, 6.0, 7.5, 7.5}, {7.0, 7.5}, 9.0, 6.0}},
-            { .subject_name = Chemistry, .score = {{8.0, 7.0, 7.0, 7.5}, {6.0, 6.5}, 8.0, 8.5}},
-            { .subject_name = Biology, .score ={{8.0, 8.0, 6.5, 6.5}, {7.3, 8.0}, 7.9, 8.7}},
-            { .subject_name = Informatics, .score ={{8.0, 7.0, 7.0, 7.5}, {9.0, 8.5}, 7.5, 6.0}},
-            { .subject_name = Literatures, .score ={{8.5, 6.0, 8.5, 8.5}, {6.0, 6.5}, 7.0, 8.5}},
-            { .subject_name = History, .score ={{6.0, 7.5, 9.0, 6.0}, {9.0, 7.5}, 7.9, 8.7}},
-            { .subject_name = Geography, .score ={{7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7}},
-            { .subject_name = Language, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
-            { .subject_name = Moral_Education, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7}},
-            { .subject_name = Technical, .score ={{7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7}},
-            { .subject_name = PE, .score ={{9.0, 8.0, 9.0, 8.0}, {6.0, 7.5}, 7.5, 6.0}},
-        }
-    }; 
-    numStudents=7;
-}
-//Tính điểm tổng kết và trung bình môn của toàn bộ học sinh
-void tinhDiem(Student students[], int numStudents) {
-    for (int i = 0; i < numStudents; i++) {
-        ketQuaHocSinh[i].diemTongKet = 0;
-        for (int j = 0; j < 12; j++) {
-            ketQuaHocSinh[i].diemTrungBinhMonHoc[j] = Aver(students[i].subject[j].score.test_mini,
-                                                      students[i].subject[j].score.test_45mins,
-                                                      students[i].subject[j].score.mid_term_score,
-                                                      students[i].subject[j].score.end_term_score);
-            ketQuaHocSinh[i].diemTongKet += ketQuaHocSinh[i].diemTrungBinhMonHoc[j];
-            
-        }
-        ketQuaHocSinh[i].diemTongKet/=12;
+        printf("|T.K |\n");
+    for(int i=0;i<para_Si_so_lop;i++){
+        printf("|%-3d",i+1);
+        printf("|%-25s",Hoc_sinh[i].hoten);
+        printf("|%-5s",Hoc_sinh[i].class);
+        printf("|%-9s",Hoc_sinh[i].gender==1?"Nam":"Nu");
+        printf("| %-2d",Hoc_sinh[i].birthday.day);
+        printf("/%-2d",Hoc_sinh[i].birthday.month);
+        printf("/%-5d ",Hoc_sinh[i].birthday.year);
+        tinhDiem(Hoc_sinh,para_Si_so_lop);
+        for (int j=0; j<12; j++){
+        printf("|%-4.1f",ketQuaHocSinh[i].diemTrungBinhMonHoc[j]);
+                }
+        printf("|%-4.1f", ketQuaHocSinh[i].diemTongKet);
+        printf("|\n");
     }
+        printf("$");
+        int length_1 = 124;
+    for (int i = 0; i < length_1; i++) {
+        printf("~");
+        }
+        printf("$");
 }
+// Hết chức năng 1.1
+
+// Hiện thị chức năng 1.2
 //Hàm tách từng thành phần trong tên
 void splitName(char* fullName, char** firstName, char** middleName, char** lastName) {
     char* tokens[10];  // Mảng chứa các từ trong tên
@@ -426,59 +473,8 @@ int compareNamesByIndex(const void* a, const void* b) {// hàm để sắp xếp
     int indexB = *(int*)b;
     return compareNames(&Hoc_sinh[indexA], &Hoc_sinh[indexB]);
 }
-// Chức năng 1.
-// Hàm  cho chức năng 1.1
-void Hien_thi_ds_Hoc_sinh_DiemTB_mon(int para_Si_so_lop ){// Hiện thị mặc định theo thứ tự của mảng có sẵn
-        tinhDiem(Hoc_sinh,numStudents);
-        printf("\n");
-        char tieude[]="~~~---DANH SACH HOC SINH---~~~";
-        printf("%70s\n",tieude);
-        int length = 126;
-        for (int i = 0; i < length; i++) {
-        printf("_");
-        }
-        printf("\n");
-        printf("|STT");
-        char name[] = "Ho va Ten";
-        printf("|%-25s", name);
-        char lop[] ="Lop";
-        printf("|%-5s", lop);
-        char gender[] = "Gioi Tinh";
-        printf("|%-6s",gender);
-        char date[] = "Ngay Sinh";
-        printf("|%-13s",date);
-        for (int i = 0; i < 12; i++) {//In ten cac mon hoc
-        printf("|%-4s", subjectNameToString(i)); 
-        }
-        printf("|T.K |\n");
-    for(int i=0;i<para_Si_so_lop;i++){
-        printf("|%-3d",i+1);
-        printf("|%-25s",Hoc_sinh[i].hoten);// can le tu ben trai sang phai fill 25 ki tu
-                // Ten nguoi thuong ko dai qua 25 ki tu
-        printf("|%-5s",Hoc_sinh[i].class);
-        printf("|%-9s",Hoc_sinh[i].gender==1?"Nam":"Nu");
-        printf("| %-2d",Hoc_sinh[i].birthday.day);
-        printf("/%-2d",Hoc_sinh[i].birthday.month);
-        printf("/%-5d ",Hoc_sinh[i].birthday.year);
-        for (int j=0; j<12; j++){
-        printf("|%-4.1f", Aver(Hoc_sinh[i].subject[j].score.test_mini,
-                                Hoc_sinh[i].subject[j].score.test_45mins,
-                                Hoc_sinh[i].subject[j].score.mid_term_score,
-                                Hoc_sinh[i].subject[j].score.end_term_score ));
-                }
-        printf("|%-4.1f", ketQuaHocSinh[i].diemTongKet);
-        printf("|\n");
-    }
-        printf("$");
-        int length_1 = 124;
-    for (int i = 0; i < length_1; i++) {
-        printf("~");
-        }
-        printf("$");
-}
-// Hết chức năng 1.1
-// Hiện thị chức năng 1.2
 void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
+        tinhDiem(Hoc_sinh,numStudents);
         int indices[MAX_SI_SO];//Tạo mảng tạm để ko làm thay đổi dữ liệu gốc của mảng
         for (int i = 0; i < numStudents; i++) {
          indices[i] = i;
@@ -487,7 +483,7 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         
         char tieude[]="~~~---DANH SACH HOC SINH---~~~";
         printf("\n%70s\n",tieude);
-        int length = 121;//in ra dòng kẻ
+        int length = 126;
         for (int i = 0; i < length; i++) {
         printf("_");
         }
@@ -503,7 +499,7 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
         for (int i = 0; i < 12; i++) {//In ten cac mon hoc
         printf("|%-4s", subjectNameToString(i)); 
         }
-        printf("|\n");
+        printf("|T.K |\n");
     for(int i=0;i<para_Si_so_lop;i++){
         printf("|%-3d",i+1);
         printf("|%-25s",Hoc_sinh[indices[i]].hoten);// can le tu ben trai sang phai fill 25 ki tu
@@ -519,17 +515,35 @@ void Hien_thi_ds_Hoc_sinh_anpha(int para_Si_so_lop ){
                                 Hoc_sinh[indices[i]].subject[j].score.mid_term_score,
                                 Hoc_sinh[indices[i]].subject[j].score.end_term_score ));
                 }
+        printf("|%-4.1f", ketQuaHocSinh[indices[i]].diemTongKet);
         printf("|\n");
     }
         printf("$");
-        int length_1 = 119;
+        int length_1 = 124;
     for (int i = 0; i < length_1; i++) {
         printf("~");
         }
         printf("$");
 }
 //hết Chức năng 1.2
+
 //Hàm chức nằng 1.3
+//Hàm so sánh điểm tổng kết
+int compareByDiemTongKet(const void* a, const void* b) {
+    int indexA = *(int*)a;
+    int indexB = *(int*)b;
+
+    float diemTongKetA = ketQuaHocSinh[indexA].diemTongKet;
+    float diemTongKetB = ketQuaHocSinh[indexB].diemTongKet;
+    // Sắp xếp giảm dần
+    if (diemTongKetA < diemTongKetB) {
+        return 1; 
+    } else if (diemTongKetA > diemTongKetB) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
 void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
@@ -561,8 +575,7 @@ void Hien_thi_ds_Hoc_sinh_theo_DTK(int para_Si_so_lop) {
         printf("|T.K |\n");
     for(int i=0;i<para_Si_so_lop;i++){
         printf("|%-3d",i+1);
-        printf("|%-25s",Hoc_sinh[indices[i]].hoten);// can le tu ben trai sang phai fill 25 ki tu
-                // Ten nguoi thuong ko dai qua 25 ki tu
+        printf("|%-25s",Hoc_sinh[indices[i]].hoten);
         printf("|%-5s",Hoc_sinh[indices[i]].class);
         printf("|%-9s",Hoc_sinh[indices[i]].gender==1?"Nam":"Nu");
         printf("| %-2d",Hoc_sinh[indices[i]].birthday.day);
@@ -841,8 +854,10 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
     printf("\n");
     // Tiêu đề phiếu báo điểm
     printf("\t\tPHIEU BAO DIEM\n");
-    printf("\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
-
+    for(int i=0;i<10;i++){
+        printf(" ");
+    }
+    printf("Hoc ky X - Nam hoc 20XX - 20XX\n\n");
     // Thông tin cá nhân (in ngày sinh từ student.birthday)
     printf("Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
            student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
@@ -911,7 +926,6 @@ void inPhieuDiemCaNhan(Student student, Diem diem, int STT) {
 //Hàm in phiếu điểm thành file .txt
 void InPhieuDiemVaoTep(Student student, Diem diem, int STT ) {
     char tenTep[50]; // Tạo một mảng để chứa tên tệp
-
     // Tạo tên tệp dựa trên họ tên và lớp của học sinh (có gạch dưới ngăn cách)
     sprintf(tenTep, "%s_%s.txt", student.hoten, student.class);
     // Thay thế khoảng trắng bằng dấu gạch dưới
@@ -923,9 +937,15 @@ void InPhieuDiemVaoTep(Student student, Diem diem, int STT ) {
         printf("Khong the mo tep %s de ghi!\n", tenTep);
         return;
     }
-    fprintf(f, "\t\tPHIEU BAO DIEM\n");
-    fprintf(f, "\t\t\tHoc ky X - Nam hoc 20XX - 20XX\n\n");
-    fprintf(f, "Ho va ten: %-25s\tNgay sinh: %-2d/%-2d/%-5d\t\nLop: %s\n", 
+    for(int i=0;i<17;i++){
+        fprintf(f," ");
+    }
+    fprintf(f, "PHIEU BAO DIEM\n");
+    for(int i=0;i<10;i++){
+        fprintf(f," ");
+    }
+    fprintf(f, "Hoc ky X - Nam hoc 20XX - 20XX\n\n");
+    fprintf(f, "Ho va ten: %-25s\tNgay sinh: %-2d/%2d/%-5d\t\nLop: %s\n", 
             student.hoten, student.birthday.day, student.birthday.month, student.birthday.year, student.class);
     for (int j = 1; j < 65; j++) {
         fprintf(f, "_");
@@ -982,12 +1002,12 @@ void InPhieuDiemVaoTep(Student student, Diem diem, int STT ) {
 }
 //Hết chức năng 3.
 //Chức năng 4.
-//Phú Béo
-void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
+//Hiển thị danh sách điểm môn theo danh sách mặc định
+void Hien_thi_ds_Diem_mon_mac_dinh(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
         printf("\n");
         printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
-        int length = 126;
+        int length = 126-8;
         for (int i = 0; i < length; i++) {
         printf("_");
         }
@@ -1023,13 +1043,13 @@ void Hien_thi_ds_Diem_mon(int para_Si_so_lop, int ten_mon ){
         printf("|\n");
     }
         printf("$");
-        int length_1 = 124;
+        int length_1 = 124-8;
     for (int i = 0; i < length_1; i++) {
         printf("~");
         }
         printf("$");
 }
-//Phú Béo
+//Hiển thị dánh sách điểm môn theo thứ tự của điểm trung bình
 void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
@@ -1039,7 +1059,7 @@ void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
         qsort(indices, numStudents, sizeof(int), compareByDiemTongKet);
         printf("\n");
         printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
-        int length = 126;
+        int length = 126-8;
         for (int i = 0; i < length; i++) {
         printf("_");
         }
@@ -1075,14 +1095,13 @@ void Hien_thi_ds_Diem_mon_trung_binh(int para_Si_so_lop, int ten_mon ){
         printf("|\n");
     }
         printf("$");
-        int length_1 = 124;
+        int length_1 = 124-8;
     for (int i = 0; i < length_1; i++) {
         printf("~");
         }
         printf("$");
 }
-
-//Phú Béo
+//Hiển thị danh sách điểm môn theo tên học sinh(A-Z)
 void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
     tinhDiem(Hoc_sinh,numStudents);
     int indices[MAX_SI_SO];
@@ -1092,7 +1111,7 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         qsort(indices, numStudents, sizeof(int), compareNamesByIndex);
         printf("\n");
         printf("~~~---Danh Sach Diem Hoc Sinh Mon %s---~~~\n",subjectNameToString(Hoc_sinh->subject[ten_mon].subject_name));
-        int length = 126;
+        int length = 126-8;
         for (int i = 0; i < length; i++) {
         printf("_");
         }
@@ -1128,7 +1147,7 @@ void Hien_thi_ds_Diem_mon_alpha(int para_Si_so_lop, int ten_mon ){
         printf("|\n");
     }
         printf("$");
-        int length_1 = 124;
+        int length_1 = 124-8;
     for (int i = 0; i < length_1; i++) {
         printf("~");
         }
@@ -1217,13 +1236,35 @@ void GhiDuLieuCoBan(const char *tenTep) {
         printf("Khong the mo tep %s de ghi!\n", tenTep);
         return;
     }
-    fprintf(f, "STT\tHo va ten\t\tLop\tGioi tinh\tNgay sinh\n");
-    for (int i = 0; i < numStudents; i++) {
-        fprintf(f, "%d\t%-25s\t%-5s\t%-9s\t%d/%d/%d\n", 
-                i + 1, Hoc_sinh[i].hoten, Hoc_sinh[i].class, 
-                (Hoc_sinh[i].gender == Male) ? "Nam" : "Nu",
-                Hoc_sinh[i].birthday.day, Hoc_sinh[i].birthday.month, Hoc_sinh[i].birthday.year);
+    char tieude[]="~~~---DANH SACH HOC SINH---~~~";
+        fprintf(f,"%45s\n",tieude);
+        int length_1 = 60;
+        for (int i = 0; i < length_1; i++) {
+        fprintf(f,"_");
+        }
+        fprintf(f,"\n");
+        fprintf(f,"|STT");
+        char name[] = "Ho va Ten";
+        fprintf(f,"|%-25s", name);
+        char lop[] ="Lop";
+        fprintf(f,"|%-5s", lop);
+        char gender[] = "Gioi Tinh";
+        fprintf(f,"|%-6s",gender);
+        char date[] = "Ngay Sinh";
+        fprintf(f,"|%-12s|\n",date);       
+    for(int i=0;i<numStudents;i++){
+        fprintf(f,"|%-3d",i+1);
+        fprintf(f,"|%-25s",Hoc_sinh[i].hoten);
+        fprintf(f,"|%-5s",Hoc_sinh[i].class);
+        fprintf(f,"|%-9s",Hoc_sinh[i].gender==1?"   Nam":"    Nu");
+        fprintf(f,"| %-2d",Hoc_sinh[i].birthday.day);
+        fprintf(f,"/%-2d",Hoc_sinh[i].birthday.month);
+        fprintf(f,"/%-5d| \n",Hoc_sinh[i].birthday.year);
     }
+    int length = 60;
+        for (int i = 0; i < length; i++) {
+        fprintf(f,"~");
+        }
     printf("Da ghi thong tin co ban cua hoc sinh vao tep %s\n", tenTep);
     fclose(f);
 }
@@ -1235,27 +1276,69 @@ void GhiDiem_TB(const char *tenTep) {
         return;
     }
     tinhDiem(Hoc_sinh,numStudents);
-    fprintf(f, "STT\tHo va ten\t\t");
-    for (int i = 0; i < 12; i++) {
-        fprintf(f, "%s\t", subjectNameToString(i));
-    }
-    fprintf(f, "Tong ket\n");
-
-    for (int i = 0; i < numStudents; i++) {
-        fprintf(f, "%d\t%-25s\t", i + 1, Hoc_sinh[i].hoten);
-        for (int j = 0; j < 12; j++) {
-            float diemTB = Aver(Hoc_sinh[i].subject[j].score.test_mini,
-                                Hoc_sinh[i].subject[j].score.test_45mins,
-                                Hoc_sinh[i].subject[j].score.mid_term_score,
-                                Hoc_sinh[i].subject[j].score.end_term_score);
-            fprintf(f, "%.1f\t", diemTB);
+    for (int i = 0; i < 27; i++) {
+        fprintf(f," ");
         }
-        fprintf(f, "%.1f\n", ketQuaHocSinh[i].diemTongKet); 
+    char tieude[]="~~~---DANH SACH DIEM TRUNG BINH CAC MON---~~~";
+        fprintf(f,"%45s\n",tieude);
+        int length = 102;
+        for (int i = 0; i < length; i++) {
+        fprintf(f,"_");
+        }
+        fprintf(f,"\n");
+        fprintf(f,"|STT");
+        char name[] = "Ho va Ten";
+        fprintf(f,"|%-25s", name);
+        char lop[] ="Lop";
+        fprintf(f,"|%-5s", lop);
+    for (int i = 0; i < 12; i++) {
+        fprintf(f, "|%-4s", subjectNameToString(i));
     }
+    fprintf(f, "|TBC |\n");
+    for (int i = 0; i < numStudents; i++) {
+        fprintf(f,"|%-3d",i+1);
+        fprintf(f,"|%-25s",Hoc_sinh[i].hoten);
+        fprintf(f,"|%-5s",Hoc_sinh[i].class);
+        for (int j=0; j<12; j++){
+        fprintf(f,"|%-4.1f",ketQuaHocSinh[i].diemTrungBinhMonHoc[j]);
+                }
+        fprintf(f,"|%-4.1f", ketQuaHocSinh[i].diemTongKet);
+        fprintf(f,"|\n");
+    }
+    for (int i = 0; i < 102; i++) {
+        fprintf(f,"~");
+        }
     printf("Da ghi diem TB cac mon cua hoc sinh vao tep %s\n", tenTep);
     fclose(f);
 }
 //Hết Chức năng 6.
+// hàm Login tài khoản để dùng hệ thống
+void Login(){
+    char a[20] = "A+KTLT";
+    char b[20] = "A+KTLT";
+    printf("\n\t!Dang nhap tai khoan!\n");
+    while(1){
+        printf("Tai khoan:");
+        char tk[20];
+        scanf("%s", tk);
+        if(strcmp(a, tk)!= 0){
+            printf("-(X)-!!Tai khoan nhap sai, vui long nhap lai!!\n");
+            continue;
+        }
+        else{
+            printf("Mat khau:");
+            char mk[20];
+            scanf("%s", mk);
+            if(strcmp(mk, b)!= 0){
+                printf("-(X)-!!Sai mat khau, vui long nhap lai!!\n");
+                continue;
+            }
+            else{
+                break;
+            }
+        }
+    }
+}
 int main(){
     Login();
     Tao_data_lop_6A1();      
@@ -1271,7 +1354,7 @@ int main(){
                 int sub_Option = GetMode("Select mode [0-3]", "Mode selected",3);                              
                 if (sub_Option == 1) {
                     system(CLEAR_SCREEN);              
-                    Hien_thi_ds_Hoc_sinh_DiemTB_mon(numStudents);
+                    Hien_thi_ds_Hoc_sinh_mac_dinh(numStudents);
                 } else if (sub_Option == 2) {
                     system(CLEAR_SCREEN);                   
                     Hien_thi_ds_Hoc_sinh_anpha(numStudents);
@@ -1345,7 +1428,7 @@ int main(){
             printf("Chon mon muon xem diem:\n");
             printf("0. Thoat\n");
             for (int i = 0; i < 12; i++) {
-            printf("| %d.%s\n", i + 1, subjectNameToString(Hoc_sinh->subject[i].subject_name));
+            printf("%d. %s\n", i + 1, subjectNameToString(Hoc_sinh->subject[i].subject_name));
         }
         int subjectOption = GetMode("Nhap lua chon[0-12]", "Lua chon",12) ;
         if (subjectOption > 0 && subjectOption <=12) {
@@ -1353,7 +1436,7 @@ int main(){
             int sub_Option = GetMode("Nhap lua chon[0-4]", "Lua chon",4);
             if (sub_Option == 1) {
                 system(CLEAR_SCREEN);
-                Hien_thi_ds_Diem_mon(numStudents, subjectOption-1);
+                Hien_thi_ds_Diem_mon_mac_dinh(numStudents, subjectOption-1);
             }
             else if (sub_Option == 2) {
                 system(CLEAR_SCREEN);

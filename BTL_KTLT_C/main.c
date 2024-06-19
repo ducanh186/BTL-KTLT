@@ -206,7 +206,7 @@ void Tao_data_lop_6A1(){
                 { .subject_name = Language, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 4.7 } },
                 { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {6.0, 8.0}, 7.9, 7.7 } },
                 { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.5, 8.0}, 7.3, 5.7 } },
-                { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 2.9, 0.7 } },              
+                { .subject_name = PE, .score = { {7.5, 7.0, 8.5, 7.7}, {6.5, 8.0}, 6.5, 7.0 } },              
             }
         };
         Hoc_sinh[2]=(Student){
@@ -225,7 +225,7 @@ void Tao_data_lop_6A1(){
                 { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.7 } },
                 { .subject_name = Language, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 7.5 } },
                 { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 4.5 } },
-                { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 3.5 } },
+                { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.5} },
                 { .subject_name = PE, .score = { {4.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 5.8 } },
             }
         };
@@ -264,7 +264,7 @@ void Tao_data_lop_6A1(){
                 { .subject_name = History, .score = { {6.5, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = Language, .score = { {7.5, 7.0, 5.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-                { .subject_name = Moral_Education, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
+                { .subject_name = Moral_Education, .score = { {9.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 6.5, 7.0} },
                 { .subject_name = Technical, .score = { {7.5, 7.0, 9.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = PE, .score = { {10.0, 7.0, 6.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             }
@@ -284,7 +284,7 @@ void Tao_data_lop_6A1(){
                 { .subject_name = History, .score = { {7.5, 7.0, 5.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = Geography, .score = { {7.5, 7.0, 8.5, 7.7}, {9.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = Language, .score = { {7.5, 7.0, 7.0, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
-                { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 0.9, 2.7 } },
+                { .subject_name = Moral_Education, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 9.5, 8.0 } },
                 { .subject_name = Technical, .score = { {7.5, 7.0, 8.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
                 { .subject_name = PE, .score = { {7.5, 7.0, 7.5, 7.7}, {7.3, 8.0}, 7.9, 8.7 } },
             }

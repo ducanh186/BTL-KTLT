@@ -1,141 +1,154 @@
-#include <iostream>
-using namespace std;
-enum status
-	{
-		nam_nhat=1,nam_hai,nam_ba,nam_bon,nam_nam,nam_sau,nam_bay
-	};
-struct Date
-	{
-		int ngay;
-		int thang;
-		int nam;
-	};
-struct sinh_vien
-	{
-	long mssv;
-	char ho_va_ten[100];
-	float GPA;
-	Date ngay_sinh;
-	status trangThai;
-	};
-int main(){
-	// a)Khai báo một sinh viên với dữ liệu gán sẵn
-	struct sinh_vien sv1={20224403,"Le Duc Anh",3.15,{18,6,2004},nam_hai};
-	//in du lieu sv1 ra man hinh(de e do nham:))
-	cout << "Thong tin sinh vien sv1:" << endl;
-	cout << "MSSV: " << sv1.mssv << endl;
-	cout << "Ho ten: " << sv1.ho_va_ten << endl;
-	cout << "Ngay sinh: " << sv1.ngay_sinh.ngay << "/" << sv1.ngay_sinh.thang << "/" << sv1.ngay_sinh.nam << endl;
-	cout << "Diem GPA: " << sv1.GPA << endl;
-	cout << "Trang thai: ";
-	switch (sv1.trangThai) 
-	{
-  			case nam_nhat:
-    			cout << "Nam nhat";
-    			break;
-  			case nam_hai:
-			   	cout << "Nam 2";
-			    break;
-		  	case nam_ba:
-			    cout << "Nam 3";
-			    break;
-		  	case nam_bon:
-			    cout << "Nam 4";
-			    break;
-		    case nam_nam:
-			    cout << "Nam 5";
-			    break;
-		    case nam_sau:
-			    cout << "Nam 6";
-			    break;
-		    case nam_bay:
-			    cout << "Nam 7";
-			    break;
-	}
-	cout <<"\n"<<endl;
 
-	//b)Khai báo một sinh viên, dữ liệu nhập từ bàn phím.
-	struct sinh_vien sv2;
-	cout<<"Nhap thong tin cua sv2: "<<endl;
-	cout << "MSSV: " ;
-	cin>>sv2.mssv;
-	cout << "Ho ten: ";
-	cin.ignore();
-	gets(sv2.ho_va_ten);	
-	cout << "Diem GPA: ";
-	cin>>sv2.GPA;
-	cout << "Ngay sinh:(dd/mm/yyyy):";
-	cin>>sv2.ngay_sinh.ngay>>sv2.ngay_sinh.thang>>sv2.ngay_sinh.nam;
-	cout<<"Trang thai(sv nam nhat nhap 1,nam 2 nhap 2,....):";
-	int nam_thu;
-	cin>>nam_thu;//nam nhat-1, nam hai-2,...
-	sv2.trangThai=status(nam_thu);		
-	//c)Khai báo một mảng gồm N sinh viên, N nhập từ bàn phím.
-	int n;
-	cout<<"\nNhap n:";
-	cin>>n;
-	sinh_vien sv[n];
-	//d)Nhập dữ liệu cho mảng sv[n]
-	for(int i=0;i<n;i++)
-		{
-		//nhap du lieu cua sinh vien thu i+1
-		cout << "Nhap thong tin sinh vien sv thu "<<i+1<<":\n";
-		cout << "MSSV: " ;
-		cin>>sv[i].mssv;
-		cout << "Ho ten: ";
-		cin.ignore();
-		gets(sv[i].ho_va_ten);
-		cout << "Diem GPA: ";
-		cin>>sv[i].GPA;
-		cout << "Ngay sinh:(dd/mm/yyyy):";
-		cin>>sv[i].ngay_sinh.ngay>>sv[i].ngay_sinh.thang>>sv[i].ngay_sinh.nam;
-		cout<<"Trang thai(sv nam nhat nhap 1,nam 2 nhap 2,....):";
-		int nam_thu;
-		cin>>nam_thu;//nam nhat-1, nam hai-2,...
-		sv[i].trangThai=status(nam_thu);
-		}
-	//e)Xuat du lieu n sinh vien ra man hinh
-	cout<<"Danh sach sinh vien:"<<endl;
-	//xuat ra tung sv mot
-	for(int i=0;i<n;i++)
-	{
-	cout << "\nThong tin sinh vien sv thu "<<i+1<<":\n" << endl;
-	cout << "MSSV: " << sv[i].mssv << endl;
-	cout << "Ho ten: " << sv[i].ho_va_ten << endl;
-	cout << "Ngay sinh: " << sv[i].ngay_sinh.ngay << "/" << sv[i].ngay_sinh.thang << "/" << sv[i].ngay_sinh.nam << endl;
-	cout << "Diem GPA: " << sv[i].GPA << endl;
-	cout << "Trang thai: ";
-	switch (sv[i].trangThai) 
-	{
-  			case nam_nhat:
-    			cout << "Nam nhat";
-    			break;
-  			case nam_hai:
-			   	cout << "Nam 2";
-			    break;
-		  	case nam_ba:
-			    cout << "Nam 3";
-			    break;
-		  	case nam_bon:
-			    cout << "Nam 4";
-			    break;
-		    case nam_nam:
-			    cout << "Nam 5";
-			    break;
-		    case nam_sau:
-			    cout << "Nam 6";
-			    break;
-		    case nam_bay:
-			    cout << "Nam 7";
-			    break;
-	}
-	cout <<"\n"<<endl;		
-	}
-	//f)Hiển thị điểm GPA trung bình của tất cả SV ra màn hình.
-	float tongGPA=0.0;
-	for(int i=0;i<n;i++){
-		tongGPA+=sv[i].GPA;
-	}
-	float diemGPA_TB=tongGPA/n;
-	cout<<"Diem GPA trung binh cua tat ca sinh vien la: "<<diemGPA_TB<<endl;
+#include "general_header.h"
+
+int main() {
+    Loi_chao();   // Gọi hàm chào mừng và yêu cầu đăng nhập
+    Student student;
+    student.Tao_data_lop_6A1();
+
+    int backToMainMenu = 0;
+    while (true) {
+        system("cls"); // Hoặc "clear" nếu bạn dùng Linux/macOS
+        Main_Menu_Display();  
+        int option = GetMode("Chon chuc nang [0-6]", "Ban da chon", 6); 
+
+        if (option == 1) {
+            // Hiển thị danh sách điểm trung bình
+            while (!backToMainMenu) {
+                cout << "\n-----HIEN THI DANH SACH HOC SINH----" << endl;
+                Menu_1_Display();
+                int sub_Option = GetMode("Chon chuc nang [0-3]", "Ban da chon", 3);
+                if (sub_Option == 1) {
+                    system("cls");
+                    // 1. Theo lop    
+                    // Hien tai chi co 1 lop              
+                    Hien_thi_ds_Hoc_sinh_DiemTB_mon(numStudents);
+                } else if (sub_Option == 2) {
+                    // 2. Theo Ten
+                    system("cls");                   
+                    Hien_thi_ds_Hoc_sinh_anpha(numStudents);
+                } else if(sub_Option==3){               
+                    Hien_thi_ds_Hoc_sinh_theo_DTK(numStudents);
+                } else if (sub_Option == 0) {
+                    backToMainMenu = 1; // Đặt cờ để thoát cả menu con và menu chính
+                } else {
+                    printf("Lua chon khong hop le!\n");
+                }
+                if (backToMainMenu) {
+                        break; // Thoát khỏi vòng lặp menu chính
+                        }
+            }
+            backToMainMenu = 0; 
+        } 
+        else if (option == 2) {
+            // Chỉnh sửa điểm
+            while (!backToMainMenu) {
+                cout << "\n-----CHINH SUA DIEM HOC SINH----" << endl;
+                Menu_2_Display();
+                int sub_Option = GetMode("Chon chuc nang [0-2]", "Ban da chon", 2);
+
+                if (sub_Option == 1) {  
+                    Menu_2_1_Display();
+                    student.tim_ten_de_sua_diem(Hoc_sinh, numStudents); 
+                } else if (sub_Option == 2) {
+                    student.tim_hoten_de_sua_diem(Hoc_sinh, numStudents);
+                } else if (sub_Option == 0) {
+                    backToMainMenu = 1; 
+                } else {
+                    cout << "Lua chon khong hop le!" << endl;
+                }
+
+                if (backToMainMenu) {
+                    break; // Thoát khỏi vòng lặp menu chính
+                }
+            }
+            backToMainMenu = 0; // Reset lại cờ backToMainMenu
+        }
+        else if (option == 3) {
+            // Hiển thị danh sách học sinh và in phiếu điểm
+            while (true) {
+                system("cls");
+                cout << "\n-----HIEN THI DANH SACH HOC SINH----\n";
+                hienThiDanhSachHocSinhCoBan(Hoc_sinh, numStudents);
+
+                cout << "\nNhap STT hoc sinh de xem diem chi tiet (0 de quay lai): ";
+                int studentIndex;
+                cin >> studentIndex;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa bộ đệm '\n'
+
+                if (studentIndex == 0) {
+                    break; // Quay lại menu chính
+                } else if (studentIndex >= 1 && studentIndex <= numStudents) {
+                    inPhieuDiemCaNhan(Hoc_sinh[studentIndex - 1]); 
+                    cout << "\nBan co muon in phieu diem ra tep khong? (y/n): ";
+                    char inRaTep;
+                    cin >> inRaTep;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+                    if (tolower(inRaTep) == 'y') {
+                        InPhieuDiemVaoTep(Hoc_sinh[studentIndex - 1]);
+                    }
+                    cout << "\nNhan Enter de tiep tuc...";
+                    cin.get(); // Chờ người dùng nhấn Enter
+                } else {
+                    cout << "STT khong hop le!" << endl;
+                }
+
+            }
+        } 
+        else if (option == 4) {
+            // Hiển thị danh sách điểm theo từng môn học
+                    while (!backToMainMenu) { // Vòng lặp menu con
+            printf("\n-----HIEN THI DANH SACH DIEM MON HOC----\n");
+            printf("Chon mon muon xem diem:\n");
+            printf("0. Thoat\n");
+            for (int i = 0; i < 12; i++) {
+            printf("| %d.%s\n", i + 1, subjectNameToString(Hoc_sinh->getSubject(i).subject_name));
+        }
+        int subjectOption = GetMode("Nhap lua chon[0-12]", "Lua chon",12) ;
+        if (subjectOption > 0 && subjectOption <=12) {
+            Menu_4_Display();
+            int sub_Option = GetMode("Nhap lua chon[0-4]", "Lua chon",4);
+            if (sub_Option == 1) {
+                system("cls");
+                Hien_thi_ds_Diem_mon(numStudents, subjectOption-1);
+            }
+            else if (sub_Option == 2) {
+                system("cls");
+                 Hien_thi_ds_Diem_mon_alpha(numStudents, subjectOption-1);
+            }
+            else if (sub_Option == 3) {
+                system("cls");
+                Hien_thi_ds_Diem_mon_trung_binh(numStudents, subjectOption-1);
+            }
+            else if (sub_Option ==0) {
+                backToMainMenu = 1; 
+            }
+
+        }
+        else if (subjectOption == 0) {
+            backToMainMenu = 1;
+        }
+         else {
+            printf("Lua chon khong hop le!\n");
+        }
+        if (backToMainMenu) {
+                break; // Thoát khởi vòng lặp menu chính
+                }       
+    }
+     
+        } else if (option == 5) {
+            cout << "Luu y: \n+ He thong se tu dong chuan hoa ho va ten (VD: liNH-> Linh)\n";
+            cout << "+ Khi khong nhap diem hoc sinh, diem mac dinh se la 0" << endl;
+            student.ThemHocSinh();
+        } else if (option == 6) {
+            GhiDuLieuCoBan("du_lieu_co_ban.txt");
+            GhiDiem_TB("diem_hoc_sinh.txt");
+            cout << "Nhan Enter de tiep tuc!!";
+            cin.get();
+        } else if (option == 0) { // Exiting the program
+            cout << "\nThoat chuong trinh!" << endl;
+            cin.get();
+            return 0;
+        }
+    }
 }

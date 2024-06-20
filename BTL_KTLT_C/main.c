@@ -9,7 +9,6 @@
 #endif
 #define MAX_SI_SO 50
 
-typedef enum Gender Gender;
  struct Date { 
     int day;
     int month;
